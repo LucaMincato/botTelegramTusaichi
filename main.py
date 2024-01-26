@@ -1,41 +1,40 @@
-from telegram import Update
-import sqlite3
+from telegram.ext import ApplicationBuilder, CommandHandler
+from telegram.ext import filters, MessageHandler
+from telegram.ext import ConversationHandler
+from PyDictionary import PyDictionary
+
+from command import start
+
+from conversation import 
+
+if __name__ == '__main__':
+    application = ApplicationBuilder().token(BOT_TOKEN).build()
+
+    dictionary = PyDictionary()
 
 
-# connecting to a database
+    application.bot_data['dictionary'] = dictionary
 
-conn = sqlite3.connect('users.db')
-cur = conn.cursor()
 
-list_name = [('Luca', 'Mincato'), ('Emanuele', 'Mincato'), ('Romano', 'Mincato')]
+    start_handler = CommandHandler('start', start)
+    meaning_handler = CommandHandler('mean', meaning)
 
-#cur.execute('CREATE TABLE partecipanti1 (name text, surname text)')
-#conn.commit
 
-cur.execute("""SELECT * FROM partecipanti1 """)
-fetch = cur.fetchall()
-conn.commit()
+    conv_handler = ConversationHandler(
+        entry_points=[CommandHandler('start_dialog',start_dialog)],
+        states={
+            ANSWER: [MessageHandler(filters.Regex('(Yes)$'),answer)],
+            ANSWER2: [MessageHandler(filters.Regex('(Yes|no)$'),answer)],
+            ANSWER3: [MessageHandler(filters.Regex('(Yes)$'),answer)],
+            ANSWER4: [MessageHandler(filters.Regex('(Yes)$'),answer)],
+            ANSWER5: [MessageHandler(filters.Regex('(Yes)$'),answer)],
+        },
+        fallbacks=[CommandHandler('cancel',cancel)],
+    )
 
-cur.execute("""SELECT surname FROM partecipanti1 """)
-fetchSurnam = cur.fetchall()
-conn.commit()
+    application.add_handler(start_handler)
+    application.add_handler(meaning_handler)
+    application.add_handler(conv_handler)
 
-inputName = input('inserisci il tuo nome')
-inputSurname = input('inserisci il cognonme')
 
-users = (inputName,inputSurname)
-
-if users in fetch:
-    print('il cognome esiste già')
-else:
-    cur.execute(""" INSERT INTO partecipanti1 VALUES (?, ?)""", [inputName, inputSurname])
-
-conn.commit()
-conn.close()
-
-conn1 = sqlite3.connect('users.db')
-curs1 = conn1.cursor()
-curs1.execute("""SELECT * FROM partecipanti1 """)
-print(curs1.fetchall())
-conn1.commit()
-conn1.close()
+    application.run_polling()
