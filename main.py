@@ -15,17 +15,19 @@ list_name = [('Luca', 'Mincato'), ('Emanuele', 'Mincato'), ('Romano', 'Mincato')
 cur.execute("""SELECT * FROM partecipanti1 """)
 fetch = cur.fetchall()
 conn.commit()
+
+cur.execute("""SELECT surname FROM partecipanti1 """)
+fetchSurnam = cur.fetchall()
+conn.commit()
+
 inputName = input('inserisci il tuo nome')
 inputSurname = input('inserisci il cognonme')
 
-for row in fetch:
-    nameFetched = row[0]
-    surnameFetched = row[1]
-    if inputName.strip() not in nameFetched and inputSurname.strip() not in surnameFetched:
-        print('checking')
-    else:
-        print('il cognome esiste già')
-        break
+users = (inputName,inputSurname)
+
+if users in fetch:
+    print('il cognome esiste già')
+else:
     cur.execute(""" INSERT INTO partecipanti1 VALUES (?, ?)""", [inputName, inputSurname])
 
 conn.commit()
