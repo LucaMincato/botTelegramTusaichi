@@ -4,8 +4,8 @@ from telegram.ext import ConversationHandler
 from PyDictionary import PyDictionary
 
 from command import start
-
-from conversation import 
+from conversation import start_dialog, answer, cancel, ANSWER
+from SecretToken import BOT_TOKEN
 
 if __name__ == '__main__':
     application = ApplicationBuilder().token(BOT_TOKEN).build()
