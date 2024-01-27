@@ -8,9 +8,10 @@ from conversation import start_dialog, answer, cancel, ANSWER
 from SecretToken import BOT_TOKEN
 
 if __name__ == '__main__':
+    
     application = ApplicationBuilder().token(BOT_TOKEN).build()
 
-    startdialog_handler = CommandHandler('start_dialog', start_dialog)
+   # startdialog_handler = CommandHandler('start_dialog', start_dialog)
     start_handler = CommandHandler('start', start) 
    
     conv_handler = ConversationHandler(
@@ -24,5 +25,7 @@ if __name__ == '__main__':
     )
 
     application.add_handler(start_handler)
-    application.add_handler(startdialog_handler)
+    application.add_handler(conv_handler)
+
     application.run_polling()
+    
