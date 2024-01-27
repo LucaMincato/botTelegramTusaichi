@@ -2,21 +2,22 @@ import sqlite3
 
 
 def ControlUser(tupla):
-    
-    conn = sqlite3.connect('botTelegram.db')
+
+    conn = sqlite3.connect('telegramBot.db')
     cur = conn.cursor()
 
-    cur.execute("""SELECT chatId FROM partecipanti """)
+    cur.execute("""SELECT chatId FROM partecipanti2 """)
     fetch = cur.fetchall()
-    conn.commit()
+    conn.commit() 
 
     username = tupla[0]
-    chat_id = tupla[1]
-
-    if chat_id in fetch:
+    chat_id = int(tupla[1])
+    chat = (chat_id,)
+    
+    if chat in fetch:
         return 0
     else:
-        cur.execute(""" INSERT INTO partecipanti VALUES (?, ?)""", [username, chat_id])
+        cur.execute(""" INSERT INTO partecipanti2 VALUES (?, ?)""", [username, chat_id])
         conn.commit()
         conn.close()
         return 1
