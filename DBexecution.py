@@ -34,3 +34,19 @@ def CheckAddmin(tupla):
         return 1
     else :
         return 0
+    
+def fetchDbChatId():
+    conn1 = sqlite3.connect('telegramBot.db')
+    curs1 = conn1.cursor()
+    fetchChatId = curs1.execute("""SELECT chatId FROM partecipanti2 """)
+    chat_id_list = []
+
+    for row in fetchChatId:
+        i = 0
+        chat_id_list.append(row[0])
+        i = i + 1
+
+    conn1.commit()
+    conn1.close()
+    
+    return chat_id_list
