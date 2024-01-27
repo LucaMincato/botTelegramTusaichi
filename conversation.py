@@ -12,7 +12,7 @@ def registerId():
     return content
 
 
-async def start_dialog(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def start_dialog(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     chat_id = update.effective_chat.id
     await context.bot.send_message(chat_id=chat_id, text='Benvenuto a tu sai chi il gioco che ti metterà alla prova\nInserisci il tuo nome', parse_mode='HTML')
     return ANSWER
@@ -23,10 +23,12 @@ async def answer(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     global userId
     global user
     chat_id = update.effective_chat.id
+    print( chat_id)
     userId = chat_id
     user = update.effective_message.text
     entrydb = registerId()
     already_exist = ControlUser(entrydb)
+
     if already_exist == 0:
         await context.bot.send_message(chat_id=chat_id, text='Mi dispiace ma risulta che tu sia già registrato', parse_mode='HTML')
     else:
