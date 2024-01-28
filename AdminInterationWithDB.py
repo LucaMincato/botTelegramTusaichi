@@ -1,14 +1,15 @@
 import sqlite3
 
-#conn = sqlite3.connect('telegramBot.db')
-#cur = conn.cursor()
-#
-#cur.execute('CREATE TABLE partecipanti2 (username text, chatId int)')
-#conn.commit
+# conn = sqlite3.connect('telegramBot.db')
+# cur = conn.cursor()
+# 
+# cur.execute('CREATE TABLE partecipantiBot (username text, chatId int, squadra text, tuSaiChi text)')
+# conn.commit
 
 conn1 = sqlite3.connect('telegramBot.db')
 curs1 = conn1.cursor()
-fetchChatId = curs1.execute("""SELECT chatId FROM partecipanti2 """)
+curs1.execute("""SELECT * FROM partecipantiBot """)
+fetchChatId = curs1.fetchall()
 print(fetchChatId)
 
 dummy = []
