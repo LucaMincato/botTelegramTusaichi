@@ -9,7 +9,11 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     chat_id = update.effective_chat.id
     await context.bot.send_message(
         chat_id = chat_id,
-        text=(f'Hello in this bot. Your chat id is:{chat_id}'), parse_mode='HTML'
+        text=('Benvenuto a tuSaiChi un gioco che meterà a dura prova le tue abilità.\
+              \nIl gioco non è semplice vi avviso. \
+              L\'unico modo per vincere è facendo gioco di squadra ed aiutando il tuSaiChi della propria squadra a manifestarsi senza farsi scoprire.\nSe non hai mai giocato al questo gioco o le regole ti sono poco chiare non preoccuparti usa il comando /help.\
+              \nUna volta che hai capito le regole e ti senti pronto per iniziare questa sfida clicca il comando /addme.\
+              \nBuons fortuna e ricorda di non nominare mai tu sai chi'), parse_mode='HTML'
     )
 
 async def getPartecipant(update: Update, context: ContextTypes.DEFAULT_TYPE):
