@@ -33,9 +33,21 @@ else:
 conn.commit()
 conn.close()
 
+
+
+
+
+
 conn1 = sqlite3.connect('users.db')
 curs1 = conn1.cursor()
 curs1.execute("""SELECT * FROM partecipanti1 """)
+
+for row in (curs1.fetchall()):
+    print(row[0])
+    if row[0] == 'siamo':
+        break	
+
+
 print(curs1.fetchall())
 conn1.commit()
 conn1.close()
