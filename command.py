@@ -1,4 +1,4 @@
-from DBexecution import CheckAddmin, checkUserId
+from DBexecution import CheckAddmin, checkUserId, getUserQuery
 
 
 from telegram import Update
@@ -12,4 +12,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         text=(f'Hello in this bot. Your chat id is:{chat_id}'), parse_mode='HTML'
     )
 
+async def getPartecipant(update: Update, context: ContextTypes.DEFAULT_TYPE):
+        users = getUserQuery()
+        await context.bot.send_message(chat_id = 6307311132, text=(f'{users}'), parse_mode='HTML')
 
