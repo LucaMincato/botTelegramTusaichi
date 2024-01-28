@@ -79,6 +79,24 @@ def fromChatIdGetUser(chatId):
 
     return username        
 
+
+def fromUserGetChatId(user):
+    conn = sqlite3.connect('telegramBot.db')
+    curs = conn.cursor()
+    curs.execute("""SELECT * FROM partecipantiBot""")
+    fetch_chat_id = curs.fetchall
+    conn.commit()
+    conn.close	
+    chat_id = 0
+    for row in fetch_chat_id:
+        if user in row[1]:
+            
+            chat_id = row[0]
+            break
+
+    return chat_id 
+
+
 def getUserQuery():
     conn1 = sqlite3.connect('telegramBot.db')
     curs1 = conn1.cursor()
