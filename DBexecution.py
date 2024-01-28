@@ -15,12 +15,12 @@ def ControlUser(tupla):
     chat = (chat_id,)
     
     if chat in fetch:
-        return False
+        return True
     else:
         cur.execute(""" INSERT INTO partecipanti2 VALUES (?, ?)""", [username, chat_id])
         conn.commit()
         conn.close()
-        return True
+        return False
 
 def CheckAddmin(tupla):
 
