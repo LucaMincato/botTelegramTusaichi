@@ -5,7 +5,7 @@ def ControlUser(tupla):
     username = tupla[0]
     chat_id = tupla[1]
 
-    if checkUserId(chat_id) and username == '/start_dialog':
+    if checkUserId(chat_id) and username != '/start_dialog':
 
         return True
     
@@ -21,11 +21,9 @@ def ControlUser(tupla):
 
 def CheckAddmin(adminId):
 
-    addmin_user_id = '6307311132'
+    addmin_user_id = 6307311132
 
-    input_chat_id = adminId
-
-    if input_chat_id in addmin_user_id:
+    if adminId == addmin_user_id:
         return True
     else:
         return False
@@ -72,28 +70,25 @@ def fromChatIdGetUser(chatId):
     conn.close	
 
     for row in fetch_chat_id:
-        if chatId in row[0]:
+        if chatId in row[1]:
             
-            username = row[1]
+            username = row[0]
             break
 
     return username        
 
 
 def fromUserGetChatId(user):
-    conn = sqlite3.connect('telegramBot.db')
-    curs = conn.cursor()
-    curs.execute("""SELECT * FROM partecipantiBot""")
-    fetch_chat_id = curs.fetchall
-    conn.commit()
-    conn.close	
+
+    fetch_chat_id = getUserQuery()
+
     chat_id = 0
     for row in fetch_chat_id:
-        if user in row[1]:
+        print(row)
+        if user in row[0]:
             
-            chat_id = row[0]
-            break
-
+            chat_id = row[1]
+            break       
     return chat_id 
 
 
@@ -117,7 +112,7 @@ def upgradeTeam(newTeam, chatId):
 def upgradeTuSaiChi(TuSaiChi, chatId):
     conn1 = sqlite3.connect('telegramBot.db')
     curs1 = conn1.cursor()
-    sql = f"UPDATE partecipantiBot SET squadra = '{TuSaiChi}' WHERE chatId = {chatId}"
+    sql = f"UPDATE partecipantiBot SET tuSaiChi = '{TuSaiChi}' WHERE chatId = {chatId}"
     curs1.execute(sql)
     conn1.commit()
     conn1.close
