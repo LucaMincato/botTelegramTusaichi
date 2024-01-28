@@ -1,7 +1,7 @@
 from telegram import Update
 from telegram.ext import ContextTypes, CallbackContext, ConversationHandler
 
-from DBexecution import ControlUser
+from DBexecution import ControlUser, checkUserId, CheckAddmin, fromChatIdGetUser
 
 ANSWER,ANSWER1 = range(2)
 
@@ -30,11 +30,12 @@ async def answer(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
     if already_exist:
         await context.bot.send_message(chat_id=chat_id, text='Mi dispiace ma risulta che tu sia già registrato', parse_mode='HTML')
-        await context.bot.send_message(chat_id=6307311132, text='Luca un utente sta sercando di registrarsi due volte', parse_mode='HTML')
+        await context.bot.send_message(chat_id=6307311132, text=f'Luca {user} sta sercando di registrarsi due volte', parse_mode='HTML')
     else:
         await context.bot.send_message(chat_id=chat_id, text='Complimenti sei stato aggiunto ai partecipanti.\nOra aspetta che admin ti inserisca in una squadra e ti dica se sei il tuSaiChi', parse_mode='HTML')
+        await context.bot.send_message(chat_id=6307311132, text=f'Luca {user} vorrebbe registrarsi assegnali una squadra e rendilo o meno il tuSaiChi', parse_mode='HTML')
         
-    return ANSWER1
+    return ConversationHandler.END
 
 
 
@@ -43,10 +44,21 @@ async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await context.bot.send_message(chat_id=chat_id, text='operazione fallita', parse_mode='HTML')
     return ConversationHandler.END
 
-async def sendMessageToAdmin(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    already_exist = ControlUser(userId)
 
 
 
 
+async def startAdminInsertPartecipant(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    chat_id = update.effective_chat.id
+    is_it_admin = CheckAddmin(chat_id)
+    user_exist = checkUserId(chat_id)
+    username = fromChatIdGetUser((chat_id))
+    if user_exist:
 
+        if is_it_admin:
+            
+            await context.bot.send_message(chat_id=chat_id, text='Luca a che squadra vuoi assegnare tizio', parse_mode='HTML')
+        else:
+             await context.bot.send_message(chat_id=chat_id, text='Mi dispiace ma solo Luca Può usare questo comando', parse_mode='HTML')
+
+    return ANSWER1
