@@ -84,7 +84,6 @@ def fromUserGetChatId(user):
 
     chat_id = 0
     for row in fetch_chat_id:
-        print(row)
         if user in row[0]:
             
             chat_id = row[1]
