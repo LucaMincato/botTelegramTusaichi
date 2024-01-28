@@ -12,7 +12,7 @@ def ControlUser(tupla):
     else:
         conn = sqlite3.connect('telegramBot.db')
         cur = conn.cursor()
-        cur.execute(""" INSERT INTO partecipanti2 VALUES (?, ?)""", [username, chat_id])
+        cur.execute(""" INSERT INTO partecipantiBot VALUES (?, ?, ?, ?)""", [username, chat_id, 'Nessuna', 'False'])
         conn.commit()
         conn.close()
 
@@ -35,7 +35,7 @@ def checkUserId(userId):
     conn = sqlite3.connect('telegramBot.db')
     cur = conn.cursor()
 
-    cur.execute("""SELECT chatId FROM partecipanti2 """)
+    cur.execute("""SELECT chatId FROM partecipantiBot """)
     fetch = cur.fetchall()
     conn.commit()
     conn.close
@@ -50,7 +50,7 @@ def checkUserId(userId):
 def fetchDbChatId():
     conn1 = sqlite3.connect('telegramBot.db')
     curs1 = conn1.cursor()
-    fetch_chat_id = curs1.execute("""SELECT chatId FROM partecipanti2 """)
+    fetch_chat_id = curs1.execute("""SELECT chatId FROM partecipantiBot """)
     chat_id_list = []
 
     for row in fetch_chat_id:
@@ -66,9 +66,10 @@ def fetchDbChatId():
 def fromChatIdGetUser(chatId):
     conn = sqlite3.connect('telegramBot.db')
     curs = conn.cursor()
-    curs.execute("""SELECT * FROM partecipanti2 """)
+    curs.execute("""SELECT * FROM partecipantiBot""")
     fetch_chat_id = curs.fetchall
     conn.commit()
+    conn.close	
 
     for row in fetch_chat_id:
         if chatId in row[0]:
@@ -77,3 +78,12 @@ def fromChatIdGetUser(chatId):
             break
 
     return username        
+
+def getUserQuery():
+    conn1 = sqlite3.connect('telegramBot.db')
+    curs1 = conn1.cursor()
+    curs1.execute("""SELECT * FROM partecipantiBot """)
+    fetch_chat_id = curs1.fetchall()
+    conn1.commit()
+    conn1.close
+    return fetch_chat_id
