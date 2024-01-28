@@ -71,12 +71,12 @@ async def teamAdminInsertPartecipant(update: Update, context: ContextTypes.DEFAU
 
         checkUserId(chat_id_user)   
         await context.bot.send_message(chat_id=chat_id, text=f'Luca a che squadra vuoi assegnare {newUsername}', parse_mode='HTML')
+        return SQUADRA
     else:
 
         await context.bot.send_message(chat_id=chat_id, text='Luca questo nome non esiste', parse_mode='HTML')
-
-    return SQUADRA
-
+        return  ConversationHandler.END
+    
 
 async def tuSaiChiAdminInsertPartecipant(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     chat_id = update.effective_chat.id
