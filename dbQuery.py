@@ -28,7 +28,7 @@ users = (inputName,inputSurname)
 if users in fetch:
     print('il cognome esiste già')
 else:
-    cur.execute(""" INSERT INTO partecipanti1 VALUES (?, ?)""", [inputName, inputSurname])
+    cur.execute(""" INSERT INTO partecipantiBot VALUES (?, ?, ?, ?)""", [inputName, inputSurname,'Nessuna', 'False'])
 
 conn.commit()
 conn.close()
@@ -38,9 +38,9 @@ conn.close()
 
 
 
-conn1 = sqlite3.connect('users.db')
+conn1 = sqlite3.connect('telegramBot.db')
 curs1 = conn1.cursor()
-curs1.execute("""SELECT * FROM partecipanti1 """)
+curs1.execute("""SELECT * FROM partecipantiBot """)
 
 for row in (curs1.fetchall()):
     print(row[0])
