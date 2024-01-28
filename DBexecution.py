@@ -105,3 +105,11 @@ def getUserQuery():
     conn1.commit()
     conn1.close
     return fetch_chat_id
+
+def upgradeTeam(newTeam, chatId):
+    conn1 = sqlite3.connect('telegramBot.db')
+    curs1 = conn1.cursor()
+    sql = f"UPDATE partecipantiBot SET squadra = '{newTeam}' WHERE chatId = {chatId}"
+    curs1.execute(sql)
+    conn1.commit()
+    conn1.close
