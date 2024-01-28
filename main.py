@@ -1,7 +1,6 @@
 from telegram.ext import ApplicationBuilder, CommandHandler
 from telegram.ext import filters, MessageHandler
 from telegram.ext import ConversationHandler
-from PyDictionary import PyDictionary
 
 from command import start
 from conversation import start_dialog, answer, cancel, ANSWER
