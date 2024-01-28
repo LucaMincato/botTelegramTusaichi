@@ -21,19 +21,19 @@ def ControlUser(tupla):
         conn.commit()
         conn.close()
         return False
+    
 
-def CheckAddmin(tupla):
+def CheckAddmin(adminId):
 
     addmin_user_id = '6307311132'
-    addmin_username = 'LucaMincato'
 
-    input_username = tupla[0]
-    input_chat_id = tupla[1]
+    input_chat_id = adminId
 
-    if input_username in addmin_username and input_chat_id in addmin_user_id:
+    if input_chat_id in addmin_user_id:
         return True
-    else :
+    else:
         return False
+    
     
 def fetchDbChatId():
     conn1 = sqlite3.connect('telegramBot.db')
