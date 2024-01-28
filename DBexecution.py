@@ -15,12 +15,12 @@ def ControlUser(tupla):
     chat = (chat_id,)
     
     if chat in fetch:
-        return 0
+        return False
     else:
         cur.execute(""" INSERT INTO partecipanti2 VALUES (?, ?)""", [username, chat_id])
         conn.commit()
         conn.close()
-        return 1
+        return True
 
 def CheckAddmin(tupla):
 
@@ -31,9 +31,9 @@ def CheckAddmin(tupla):
     input_chat_id = tupla[1]
 
     if input_username in addmin_username and input_chat_id in addmin_user_id:
-        return 1
+        return True
     else :
-        return 0
+        return False
     
 def fetchDbChatId():
     conn1 = sqlite3.connect('telegramBot.db')
@@ -50,3 +50,4 @@ def fetchDbChatId():
     conn1.close()
     
     return chat_id_list
+

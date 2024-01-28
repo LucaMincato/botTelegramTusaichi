@@ -29,18 +29,20 @@ async def answer(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     entrydb = registerId()
     already_exist = ControlUser(entrydb)
 
-    if already_exist == 0:
+    if already_exist:
         await context.bot.send_message(chat_id=chat_id, text='Mi dispiace ma risulta che tu sia già registrato', parse_mode='HTML')
     else:
         await context.bot.send_message(chat_id=chat_id, text='Complimenti sei stato aggiunto ai partecipanti', parse_mode='HTML')
+        
     return ConversationHandler.END
 
 
 
 async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     chat_id = update.effective_chat.id
-    context.bot.send_message(chat_id=chat_id, text='operazione fallita', parse_mode='HTML')
+    await context.bot.send_message(chat_id=chat_id, text='operazione fallita', parse_mode='HTML')
     return ConversationHandler.END
+
 
 
 
