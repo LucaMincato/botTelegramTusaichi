@@ -2,24 +2,20 @@ import sqlite3
 
 
 def ControlUser(tupla):
-
-    conn = sqlite3.connect('telegramBot.db')
-    cur = conn.cursor()
-
-    cur.execute("""SELECT chatId FROM partecipanti2 """)
-    fetch = cur.fetchall()
-    conn.commit() 
-
     username = tupla[0]
-    chat_id = int(tupla[1])
-    chat = (chat_id,)
-    
-    if chat in fetch:
+    chat_id = tupla[1]
+
+    if checkUserId(chat_id):
+
         return True
+    
     else:
+        conn = sqlite3.connect('telegramBot.db')
+        cur = conn.cursor()
         cur.execute(""" INSERT INTO partecipanti2 VALUES (?, ?)""", [username, chat_id])
         conn.commit()
         conn.close()
+
         return False
     
 
@@ -34,7 +30,23 @@ def CheckAddmin(adminId):
     else:
         return False
     
-    
+
+def checkUserId(userId):
+    conn = sqlite3.connect('telegramBot.db')
+    cur = conn.cursor()
+
+    cur.execute("""SELECT chatId FROM partecipanti2 """)
+    fetch = cur.fetchall()
+    conn.commit()
+    conn.close
+    chat_id = int(userId)
+    chat = (chat_id,)
+    if chat in fetch:
+        return True
+    else:
+        return False
+
+
 def fetchDbChatId():
     conn1 = sqlite3.connect('telegramBot.db')
     curs1 = conn1.cursor()
