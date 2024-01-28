@@ -50,10 +50,10 @@ def checkUserId(userId):
 def fetchDbChatId():
     conn1 = sqlite3.connect('telegramBot.db')
     curs1 = conn1.cursor()
-    fetchChatId = curs1.execute("""SELECT chatId FROM partecipanti2 """)
+    fetch_chat_id = curs1.execute("""SELECT chatId FROM partecipanti2 """)
     chat_id_list = []
 
-    for row in fetchChatId:
+    for row in fetch_chat_id:
         i = 0
         chat_id_list.append(row[0])
         i = i + 1
@@ -63,3 +63,17 @@ def fetchDbChatId():
     
     return chat_id_list
 
+def fromChatIdGetUser(chatId):
+    conn = sqlite3.connect('telegramBot.db')
+    curs = conn.cursor()
+    curs.execute("""SELECT * FROM partecipanti2 """)
+    fetch_chat_id = curs.fetchall
+    conn.commit()
+
+    for row in fetch_chat_id:
+        if chatId in row[0]:
+            
+            username = row[1]
+            break
+
+    return username        
