@@ -48,17 +48,17 @@ async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 
-async def startAdminInsertPartecipant(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    chat_id = update.effective_chat.id
-    is_it_admin = CheckAddmin(chat_id)
-    user_exist = checkUserId(chat_id)
-    username = fromChatIdGetUser((chat_id))
-    if user_exist:
-
-        if is_it_admin:
-            
-            await context.bot.send_message(chat_id=chat_id, text='Luca a che squadra vuoi assegnare tizio', parse_mode='HTML')
-        else:
-             await context.bot.send_message(chat_id=chat_id, text='Mi dispiace ma solo Luca Può usare questo comando', parse_mode='HTML')
-
-    return ANSWER1
+# async def startAdminInsertPartecipant(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+#     chat_id = update.effective_chat.id
+#     is_it_admin = CheckAddmin(chat_id)
+#     user_exist = checkUserId(chat_id)
+#     username = fromChatIdGetUser((chat_id))
+#     if user_exist:
+# 
+#         if is_it_admin:
+#             
+#             await context.bot.send_message(chat_id=chat_id, text='Luca a che squadra vuoi assegnare tizio', parse_mode='HTML')
+#         else:
+#              await context.bot.send_message(chat_id=chat_id, text='Mi dispiace ma solo Luca Può usare questo comando', parse_mode='HTML')
+# 
+#     return ANSWER1
