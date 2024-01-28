@@ -2,3 +2,5 @@
 SecretToken.py
 
 *.pyc
+
+*.db
