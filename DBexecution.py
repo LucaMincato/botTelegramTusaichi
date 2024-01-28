@@ -113,3 +113,11 @@ def upgradeTeam(newTeam, chatId):
     curs1.execute(sql)
     conn1.commit()
     conn1.close
+
+def upgradeTuSaiChi(TuSaiChi, chatId):
+    conn1 = sqlite3.connect('telegramBot.db')
+    curs1 = conn1.cursor()
+    sql = f"UPDATE partecipantiBot SET squadra = '{TuSaiChi}' WHERE chatId = {chatId}"
+    curs1.execute(sql)
+    conn1.commit()
+    conn1.close
