@@ -61,6 +61,7 @@ def fetchDbChatId():
     
     return chat_id_list
 
+
 def fromChatIdGetUser(chatId):
     conn = sqlite3.connect('telegramBot.db')
     curs = conn.cursor()
@@ -100,6 +101,7 @@ def getUserQuery():
     conn1.close
     return fetch_chat_id
 
+
 def upgradeTeam(newTeam: str, chatId: int):
     conn1 = sqlite3.connect('telegramBot.db')
     curs1 = conn1.cursor()
@@ -107,6 +109,7 @@ def upgradeTeam(newTeam: str, chatId: int):
     curs1.execute(sql)
     conn1.commit()
     conn1.close
+
 
 def upgradeTuSaiChi(TuSaiChi: str, chatId: int):
     conn1 = sqlite3.connect('telegramBot.db')
