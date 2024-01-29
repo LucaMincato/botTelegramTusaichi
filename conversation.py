@@ -70,7 +70,7 @@ async def teamAdminInsertPartecipant(update: Update, context: ContextTypes.DEFAU
     if 0 != chat_id_user:
 
         checkUserId(chat_id_user)   
-        await context.bot.send_message(chat_id=chat_id, text=f'Luca a che squadra vuoi assegnare {newUsername}', parse_mode='HTML')
+        await context.bot.send_message(chat_id=chat_id, text=f'Luca a che squadra vuoi assegnare {newUsername}?\nGiallo\bRosso\bBlu\bVerde', parse_mode='HTML')
         return SQUADRA
     else:
 
