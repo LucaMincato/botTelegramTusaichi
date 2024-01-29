@@ -108,10 +108,15 @@ def upgradeTeam(newTeam: str, chatId: int):
     conn1.commit()
     conn1.close
 
-def upgradeTuSaiChi(TuSaiChi, chatId):
+def upgradeTuSaiChi(TuSaiChi: str, chatId: int):
     conn1 = sqlite3.connect('telegramBot.db')
     curs1 = conn1.cursor()
-    sql = f"UPDATE partecipantiBot SET tuSaiChi = '{TuSaiChi}' WHERE chatId = {chatId}"
+    if TuSaiChi.strip().lower() == 'no':
+        bool_tu_sai_chi = False
+    else:
+        bool_tu_sai_chi = True
+
+    sql = f"UPDATE partecipantiBot SET tuSaiChi = '{bool_tu_sai_chi}' WHERE chatId = {chatId}"
     curs1.execute(sql)
     conn1.commit()
     conn1.close
