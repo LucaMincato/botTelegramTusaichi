@@ -14,7 +14,7 @@ if __name__ == '__main__':
 
    # startdialog_handler = CommandHandler('start_dialog', start_dialog)
     start_handler = CommandHandler('start', start) 
-    list_handler = CommandHandler('getpartecipant', getPartecipant) 
+    list_handler = CommandHandler('lista partecipanti', getPartecipant) 
     help_handler = CommandHandler('help', help) 
    
     conv_handler = ConversationHandler(
@@ -27,8 +27,8 @@ if __name__ == '__main__':
         fallbacks=[CommandHandler('cancel',cancel)],
     )
 
-    conv1_handler = ConversationHandler(
-    entry_points=[CommandHandler('addpartecipant',startAdminInsertPartecipant)],
+    conv_assign_partecipant_handler = ConversationHandler(
+    entry_points=[CommandHandler('assegna squadra e tuSaiChi',startAdminInsertPartecipant)],
     states={
         NOME: [MessageHandler(filters.TEXT,teamAdminInsertPartecipant),
                  CommandHandler('cancel',cancel)],
@@ -40,8 +40,8 @@ if __name__ == '__main__':
         fallbacks=[CommandHandler('cancel',cancel)],
     )
 
-    conv2_handler = ConversationHandler(
-    entry_points=[CommandHandler('messageToAll',startSendMessageToEveryone)],
+    conv_to_all_handler = ConversationHandler(
+    entry_points=[CommandHandler('messagio s tutti',startSendMessageToEveryone)],
     states={
         MESSAGE_TO_EVERYONE: [MessageHandler(filters.TEXT,endSendMessageToEveryone),
                               CommandHandler('cancel',cancel)],
@@ -53,9 +53,9 @@ if __name__ == '__main__':
     application.add_handler(start_handler)
     application.add_handler(conv_handler)
     application.add_handler(list_handler)
-    application.add_handler(conv1_handler)
+    application.add_handler(conv_assign_partecipant_handler)
     application.add_handler(help_handler)
-    application.add_handler(conv2_handler)
+    application.add_handler(conv_to_all_handler)
 
     
 
