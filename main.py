@@ -3,8 +3,9 @@ from telegram.ext import filters, MessageHandler
 from telegram.ext import ConversationHandler
 
 from command import start, getPartecipant, help
-from conversation import start_dialog, answer, cancel, ANSWER
-from conversation import startAdminInsertPartecipant, teamAdminInsertPartecipant, tuSaiChiAdminInsertPartecipant, endAdminInsertPartecipant, NOME, SQUADRA, TUSAICHI
+from conversation import start_dialog, answer, cancel, endSendMessageToEveryone, startSendMessageToEveryone
+from conversation import startAdminInsertPartecipant, teamAdminInsertPartecipant, tuSaiChiAdminInsertPartecipant, endAdminInsertPartecipant
+from conversation import ANSWER, MESSAGE_TO_EVERYONE, NOME, SQUADRA, TUSAICHI
 from SecretToken import BOT_TOKEN
 
 if __name__ == '__main__':
@@ -39,11 +40,23 @@ if __name__ == '__main__':
         fallbacks=[CommandHandler('cancel',cancel)],
     )
 
+    conv2_handler = ConversationHandler(
+    entry_points=[CommandHandler('messageToAll',startSendMessageToEveryone)],
+    states={
+        MESSAGE_TO_EVERYONE: [MessageHandler(filters.TEXT,endSendMessageToEveryone),
+                              CommandHandler('cancel',cancel)],
+
+    },
+        fallbacks=[CommandHandler('cancel',cancel)],
+    )
+
     application.add_handler(start_handler)
     application.add_handler(conv_handler)
     application.add_handler(list_handler)
     application.add_handler(conv1_handler)
     application.add_handler(help_handler)
+    application.add_handler(conv2_handler)
+
     
 
     application.run_polling()

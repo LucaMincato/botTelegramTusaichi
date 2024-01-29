@@ -1,9 +1,10 @@
 from telegram import Update
 from telegram.ext import ContextTypes, CallbackContext, ConversationHandler
 
-from DBexecution import ControlUser, checkUserId, CheckAddmin, fromChatIdGetUser, upgradeTeam, upgradeTuSaiChi,fromUserGetChatId
+from DBexecution import ControlUser, checkUserId, CheckAddmin, fromChatIdGetUser, upgradeTeam
+from DBexecution import  upgradeTuSaiChi, fromUserGetChatId, fetchDbChatId
 
-ANSWER,NOME,SQUADRA,TUSAICHI = range(4)
+ANSWER,NOME,SQUADRA,TUSAICHI, MESSAGE_TO_EVERYONE = range(5)
 
 def registerId():
     global userId
@@ -47,8 +48,6 @@ async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 
-
-
 async def startAdminInsertPartecipant(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     chat_id = update.effective_chat.id
     is_it_admin = CheckAddmin(chat_id)
@@ -60,6 +59,8 @@ async def startAdminInsertPartecipant(update: Update, context: ContextTypes.DEFA
          await context.bot.send_message(chat_id=chat_id, text='Mi dispiace ma solo Luca Può usare questo comando', parse_mode='HTML')
 
     return NOME
+
+
 
 async def teamAdminInsertPartecipant(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     chat_id = update.effective_chat.id
@@ -84,7 +85,7 @@ async def tuSaiChiAdminInsertPartecipant(update: Update, context: ContextTypes.D
     squadra = update.effective_message.text
     chat_id_user = fromUserGetChatId(newUsername)
     upgradeTeam(squadra, chat_id_user)
-    
+
     if squadra.strip().lower() in ['giallo', 'verde', 'rosso','blu']:
         await context.bot.send_message(chat_id=chat_id, text=f'Vuoi che sia il tuSaiChi', parse_mode='HTML')
         await context.bot.send_message(chat_id=chat_id_user, text=f'Sei stato assegnato alla squadra {squadra}', parse_mode='HTML')
@@ -96,7 +97,6 @@ async def tuSaiChiAdminInsertPartecipant(update: Update, context: ContextTypes.D
 
 
 async def endAdminInsertPartecipant(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    chat_id = update.effective_chat.id
     tu_sai_chi = update.effective_message.text
     chat_id_user = fromUserGetChatId(newUsername)
     upgradeTuSaiChi(tu_sai_chi, chat_id_user)
@@ -105,4 +105,28 @@ async def endAdminInsertPartecipant(update: Update, context: ContextTypes.DEFAUL
         await context.bot.send_message(chat_id=chat_id_user, text='Sei il tuSaiChi !!!', parse_mode='HTML')
     else:
         await context.bot.send_message(chat_id=chat_id_user, text='Mi spiace ma non sei il tu sai chi\nrenditi comunque utile alla squadra aiutando il tuSaiChi', parse_mode='HTML')
+    return  ConversationHandler.END
+
+
+
+async def startSendMessageToEveryone(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    chat_id = update.effective_chat.id
+    is_it_admin = CheckAddmin(chat_id)
+
+    if is_it_admin:
+        
+        await context.bot.send_message(chat_id=chat_id, text='Che messaggio vuoi mandare a tutti?', parse_mode='HTML')
+    else:
+         await context.bot.send_message(chat_id=chat_id, text='Mi dispiace ma solo Luca Può usare questo comando', parse_mode='HTML')
+
+    return MESSAGE_TO_EVERYONE
+
+
+
+async def endSendMessageToEveryone(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    text_to_send = update.effective_message.text
+    users_chat_id = fetchDbChatId()
+
+    for row in users_chat_id:
+        await context.bot.send_message(chat_id= row, text= text_to_send, parse_mode='HTML')
     return  ConversationHandler.END
