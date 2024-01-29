@@ -78,15 +78,22 @@ async def teamAdminInsertPartecipant(update: Update, context: ContextTypes.DEFAU
         return  ConversationHandler.END
     
 
+
 async def tuSaiChiAdminInsertPartecipant(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     chat_id = update.effective_chat.id
     squadra = update.effective_message.text
     chat_id_user = fromUserGetChatId(newUsername)
     upgradeTeam(squadra, chat_id_user)
-    await context.bot.send_message(chat_id=chat_id, text=f'Vuoi che sia il tuSaiChi', parse_mode='HTML')
-    await context.bot.send_message(chat_id=chat_id_user, text=f'Sei stato assegnato alla squadra {squadra}', parse_mode='HTML')
+    
+    if squadra.strip().lower() in ['giallo', 'verde', 'rosso','blu']:
+        await context.bot.send_message(chat_id=chat_id, text=f'Vuoi che sia il tuSaiChi', parse_mode='HTML')
+        await context.bot.send_message(chat_id=chat_id_user, text=f'Sei stato assegnato alla squadra {squadra}', parse_mode='HTML')
+        return TUSAICHI
+    else:
+        await context.bot.send_message(chat_id=chat_id, text='La squadra non esiste', parse_mode='HTML')
+        return  ConversationHandler.END
+    
 
-    return TUSAICHI
 
 async def endAdminInsertPartecipant(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     chat_id = update.effective_chat.id
