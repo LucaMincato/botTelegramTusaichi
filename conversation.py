@@ -2,9 +2,9 @@ from telegram import Update
 from telegram.ext import ContextTypes, CallbackContext, ConversationHandler
 
 from DBexecution import ControlUser, checkUserId, CheckAddmin, fromChatIdGetUser, upgradeTeam
-from DBexecution import  upgradeTuSaiChi, fromUserGetChatId, fetchDbChatId
+from DBexecution import  upgradeTuSaiChi, fromUserGetChatId, fetchDbChatId, fromChatIdGetTeam, getChatIdMembersOfTeam
 
-ANSWER,NOME,SQUADRA,TUSAICHI, MESSAGE_TO_EVERYONE = range(5)
+ANSWER,NOME,SQUADRA,TUSAICHI, MESSAGE_TO_EVERYONE, MESSAGE_TO_TEAM = range(6)
 
 def registerId():
     global userId
@@ -31,7 +31,7 @@ async def answer(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     already_exist = ControlUser(entrydb)
 
     if already_exist:
-        await context.bot.send_message(chat_id=chat_id, text='Mi dispiace ma risulta che tu sia già registrato', parse_mode='HTML')
+        await context.bot.send_message(chat_id=chat_id, text='C\'è stato un errore.\nO ti sei già registrato.\nOppure hai cliccato per sbaglio un comando prima di inserire il nome', parse_mode='HTML')
         await context.bot.send_message(chat_id=6307311132, text=f'Luca {user} sta sercando di registrarsi due volte', parse_mode='HTML')
     else:
         await context.bot.send_message(chat_id=chat_id, text='Complimenti sei stato aggiunto ai partecipanti.\nOra aspetta che admin ti inserisca in una squadra e ti dica se sei il tuSaiChi', parse_mode='HTML')
@@ -99,12 +99,14 @@ async def tuSaiChiAdminInsertPartecipant(update: Update, context: ContextTypes.D
 async def endAdminInsertPartecipant(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     tu_sai_chi = update.effective_message.text
     chat_id_user = fromUserGetChatId(newUsername)
-    upgradeTuSaiChi(tu_sai_chi, chat_id_user)
+    bool_tu_sai_chi = upgradeTuSaiChi(tu_sai_chi, chat_id_user)
 
-    if tu_sai_chi in 'True':
+    if bool_tu_sai_chi:
+
         await context.bot.send_message(chat_id=chat_id_user, text='Sei il tuSaiChi !!!', parse_mode='HTML')
     else:
         await context.bot.send_message(chat_id=chat_id_user, text='Mi spiace ma non sei il tu sai chi\nrenditi comunque utile alla squadra aiutando il tuSaiChi', parse_mode='HTML')
+    
     return  ConversationHandler.END
 
 
@@ -129,4 +131,27 @@ async def endSendMessageToEveryone(update: Update, context: ContextTypes.DEFAULT
 
     for row in users_chat_id:
         await context.bot.send_message(chat_id= row, text= text_to_send, parse_mode='HTML')
+    return  ConversationHandler.END
+
+
+
+async def startSendMessageToYourTeam(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    chat_id = update.effective_chat.id
+
+    await context.bot.send_message(chat_id=chat_id, text='Che messaggio vuoi mandare al tuo team?', parse_mode='HTML')
+   
+    return MESSAGE_TO_TEAM
+
+
+
+async def endSendMessageToYourTeam(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    chat_id = update.effective_chat.id
+    text_to_send = update.effective_message.text
+    users_chat_id = fetchDbChatId()
+    team = fromChatIdGetTeam(chat_id)
+    users_chat_id = getChatIdMembersOfTeam(team)
+
+    for row in users_chat_id:
+        await context.bot.send_message(chat_id= row, text= text_to_send, parse_mode='HTML')
+
     return  ConversationHandler.END

@@ -114,12 +114,48 @@ def upgradeTeam(newTeam: str, chatId: int):
 def upgradeTuSaiChi(TuSaiChi: str, chatId: int):
     conn1 = sqlite3.connect('telegramBot.db')
     curs1 = conn1.cursor()
-    if TuSaiChi.strip().lower() == 'no':
-        bool_tu_sai_chi = False
-    else:
+
+    if TuSaiChi.strip().lower() == 'si' or TuSaiChi.strip().lower() == 'sì':
         bool_tu_sai_chi = True
+    else:
+        bool_tu_sai_chi = False
 
     sql = f"UPDATE partecipantiBot SET tuSaiChi = '{bool_tu_sai_chi}' WHERE chatId = {chatId}"
     curs1.execute(sql)
     conn1.commit()
     conn1.close
+
+    return bool_tu_sai_chi
+
+def getChatIdMembersOfTeam( team: str):
+
+    conn1 = sqlite3.connect('telegramBot.db')
+    curs1 = conn1.cursor()
+    sql = f"SELECT squadra,chatId FROM partecipantiBot "
+    team_and_chat_id = curs1.execute(sql)
+    conn1.commit()
+    conn1.close
+
+    chat_id_list = []
+    
+    for row in team_and_chat_id:
+        if team in row:
+            i = 0
+            chat_id_list.append(row[1])
+            i = i + 1
+
+    conn1.commit()
+    conn1.close()
+
+    return chat_id_list
+
+def fromChatIdGetTeam(chatId: int):
+    fetch_chat_id = getUserQuery()
+    team = 0
+
+    for row in fetch_chat_id:
+        if chatId in row[1]:
+            
+            team = row[2]
+            break       
+    return team
