@@ -149,12 +149,11 @@ def getChatIdMembersOfTeam( team: str):
 
     return chat_id_list
 
-def fromChatIdGetTeam(chatId: int):
+def fromChatIdGetTeam(chatId):
     fetch_chat_id = getUserQuery()
-    team = 0
-
+    
     for row in fetch_chat_id:
-        if chatId in row[1]:
+        if chatId == row[1]:
             
             team = row[2]
             break       

@@ -41,7 +41,7 @@ if __name__ == '__main__':
     )
 
     conv_to_all_handler = ConversationHandler(
-    entry_points=[CommandHandler('messagiotutti',startSendMessageToEveryone)],
+    entry_points=[CommandHandler('messageToAll',startSendMessageToEveryone)],
     states={
         MESSAGE_TO_EVERYONE: [MessageHandler(filters.TEXT,endSendMessageToEveryone),
                               CommandHandler('cancel',cancel)],
@@ -51,7 +51,7 @@ if __name__ == '__main__':
     )
 
     conv_to_team_handler = ConversationHandler(
-    entry_points=[CommandHandler('messagioteam',startSendMessageToYourTeam)],
+    entry_points=[CommandHandler('messageToTeam',startSendMessageToYourTeam)],
     states={
         MESSAGE_TO_TEAM: [MessageHandler(filters.TEXT,endSendMessageToYourTeam),
                               CommandHandler('cancel',cancel)],
