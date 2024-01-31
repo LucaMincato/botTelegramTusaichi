@@ -5,7 +5,7 @@ def ControlUser(tupla):
     username = tupla[0]
     chat_id = tupla[1]
 
-    if checkUserId(chat_id) and username != '/start_dialog':
+    if checkUserId(chat_id) or '/' in username:
 
         return True
     
