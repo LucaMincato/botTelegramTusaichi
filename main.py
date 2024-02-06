@@ -2,7 +2,7 @@ from telegram.ext import ApplicationBuilder, CommandHandler
 from telegram.ext import filters, MessageHandler
 from telegram.ext import ConversationHandler
 
-from command import start, getPartecipant, help
+from command import start, getPartecipant, help,comemanifestarsi
 from conversation import start_dialog, answer, cancel, endSendMessageToEveryone, startSendMessageToEveryone, startSendMessageToYourTeam, endSendMessageToYourTeam
 from conversation import startAdminInsertPartecipant, teamAdminInsertPartecipant, tuSaiChiAdminInsertPartecipant, endAdminInsertPartecipant, sendPhotoToEveryone,BeReal, endBeReal
 from conversation import ANSWER, MESSAGE_TO_EVERYONE, NOME, SQUADRA, TUSAICHI, MESSAGE_TO_TEAM, BEREAL_TO_EVERYONE
@@ -16,6 +16,7 @@ if __name__ == '__main__':
     start_handler = CommandHandler('start', start) 
     list_handler = CommandHandler('getpartecipant', getPartecipant) 
     help_handler = CommandHandler('help', help) 
+    help_manifesto_handler = CommandHandler('comemanifestarsi',comemanifestarsi)
    
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler('addme',start_dialog)],
@@ -80,7 +81,7 @@ if __name__ == '__main__':
     application.add_handler(conv_to_all_handler)
     application.add_handler(conv_to_team_handler)
     application.add_handler(beReal_handler)
-    
+    application.add_handler(help_manifesto_handler)
 
     application.run_polling()
     

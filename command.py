@@ -56,7 +56,49 @@ async def help(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         text=(testo), parse_mode='HTML'
     )
 
-     
+async def comemanifestarsi(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+        chat_id = update.effective_chat.id
+        testo =  'il tuSaiChi è l\'unica persona che riceverà il messaggio dal giudice supremo.\n' \
+                'Il messaggio verrrà recapitato via telegram verso sera.\n'\
+                'Nel messaggio verrà detto cosa fare, il luogo e a che ora il manifesto deve essere visibile\n'\
+                'ATTENZIONE\n'\
+                'Non verrà detto a che ora manifestarsi ma a che ora il manifesto edve essere visibile.\n\n'\
+                'DOMANDE FRQUENTI\n\n'\
+                'Posso rivelare ai miei compagni il messaggio che il giudice supremo mi ha mandato?\n'\
+                'Sì. Anzi è importante condividere questa informazioni in modo tale da farsi aiuartare.\n\n'\
+                'I miei compagni possono creare il manifesto al posto mio?\n'\
+                'Sì. L\'obbligo del tuSaiChi è quello di manifestarsi non di fare il manifesto può benissimo essere un\'altra persona a fare il manifesto l\'importante è che ad appenderlo sia sempre il tuSaiChi.\n\n'\
+                'Posso manifestarmi più volte?\n'\
+                'Sì. L\'importante è che ogni manifesto che contiene la firma della squadra sia attaccato dal tuSaiChi. Pertanto tutti possono attaccare un foglio ma soltanto il tuSaiChi può attaccare un manifesto.\n\n'\
+                'Cosa succede se non ci si manifesta?\n'\
+                'Se non ci si manifesta la squadra andrà in contro ad un malus propriamente scritto nell\'apposito comando. Inoltre il giorno seguente il tuSaiChi che non si è manifestato dovrà obbligatoriamente appendere il manifesto del giorno prima in aggiunta al manifesto del giorno corrente.\n'\
+        
+        await context.bot.send_message(
+            chat_id = chat_id,
+            text=(testo), parse_mode='HTML'
+        )
+
+async def punteggi(update: Update, context: ContextTypes.DEFAULT_TYPE):
+        chat_id = update.effective_chat.id
+        testo =  'il tuSaiChi è l\'unica persona che riceverà il messaggio dal giudice supremo.\n' \
+                'Il messaggio verrrà recapitato via telegram verso sera.\n'\
+                'Nel messaggio verrà detto cosa fare, il luogo e a che ora il manifesto deve essere visibile\n'\
+                'ATTENZIONE\n'\
+                'Non verrà detto a che ora manifestarsi ma a che ora il manifesto edve essere visibile.\n\n'\
+                'DOMANDE FRQUENTI\n\n'\
+                'Posso rivelare ai miei compagni il messaggio che il giudice supremo mi ha mandato?\n'\
+                'Sì. Anzi è importante condividere questa informazioni in modo tale da farsi aiuartare.\n\n'\
+                'I miei compagni possono creare il manifesto al posto mio?\n'\
+                'Sì. L\'obbligo del tuSaiChi è quello di manifestarsi non di fare il manifesto può benissimo essere un\'altra persona a fare il manifesto l\'importante è che ad appenderlo sia sempre il tuSaiChi.\n\n'\
+                'Posso manifestarmi più volte?\n'\
+                'Sì. L\'importante è che ogni manifesto che contiene la firma della squadra sia attaccato dal tuSaiChi. Pertanto tutti possono attaccare un foglio ma soltanto il tuSaiChi può attaccare un manifesto.\n\n'\
+                'Cosa succede se non ci si manifesta?\n'\
+                'Se non ci si manifesta la squadra andrà in contro ad un malus propriamente scritto nell\'apposito comando. Inoltre il giorno seguente il tuSaiChi che non si è manifestato dovrà obbligatoriamente appendere il manifesto del giorno prima in aggiunta al manifesto del giorno corrente.\n'\
+        
+        await context.bot.send_message(
+            chat_id = chat_id,
+            text=(testo), parse_mode='HTML'
+        )
      
 
     
