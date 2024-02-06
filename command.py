@@ -56,5 +56,7 @@ async def help(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         text=(testo), parse_mode='HTML'
     )
 
+     
+     
 
     

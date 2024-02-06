@@ -4,8 +4,8 @@ from telegram.ext import ConversationHandler
 
 from command import start, getPartecipant, help
 from conversation import start_dialog, answer, cancel, endSendMessageToEveryone, startSendMessageToEveryone, startSendMessageToYourTeam, endSendMessageToYourTeam
-from conversation import startAdminInsertPartecipant, teamAdminInsertPartecipant, tuSaiChiAdminInsertPartecipant, endAdminInsertPartecipant, sendPhotoToEveryone
-from conversation import ANSWER, MESSAGE_TO_EVERYONE, NOME, SQUADRA, TUSAICHI, MESSAGE_TO_TEAM
+from conversation import startAdminInsertPartecipant, teamAdminInsertPartecipant, tuSaiChiAdminInsertPartecipant, endAdminInsertPartecipant, sendPhotoToEveryone,BeReal, endBeReal
+from conversation import ANSWER, MESSAGE_TO_EVERYONE, NOME, SQUADRA, TUSAICHI, MESSAGE_TO_TEAM, BEREAL_TO_EVERYONE
 from SecretToken import BOT_TOKEN
 
 if __name__ == '__main__':
@@ -60,9 +60,16 @@ if __name__ == '__main__':
         fallbacks=[CommandHandler('cancel',cancel)],
     )
 
-    image_handler = MessageHandler(filters.PHOTO & (~filters.FORWARDED), sendPhotoToEveryone)
 
+    beReal_handler = ConversationHandler(
+    entry_points=[CommandHandler('BeReal',BeReal)],
+    states={
+            BEREAL_TO_EVERYONE: [MessageHandler(filters.PHOTO & (~filters.FORWARDED) & (~filters.COMMAND) & (~filters.TEXT),endBeReal),
+                                 CommandHandler('cancel',cancel)],
 
+        },
+        fallbacks=[CommandHandler('cancel',cancel)],
+    )
 
 
     application.add_handler(start_handler)
@@ -72,7 +79,7 @@ if __name__ == '__main__':
     application.add_handler(help_handler)
     application.add_handler(conv_to_all_handler)
     application.add_handler(conv_to_team_handler)
-    application.add_handler(image_handler)
+    application.add_handler(beReal_handler)
     
 
     application.run_polling()
