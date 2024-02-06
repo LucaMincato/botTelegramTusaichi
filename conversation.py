@@ -1,5 +1,6 @@
 from telegram import Update
 from telegram.ext import ContextTypes, CallbackContext, ConversationHandler
+from requests import *
 
 from DBexecution import ControlUser, checkUserId, CheckAddmin, fromChatIdGetUser, upgradeTeam
 from DBexecution import  upgradeTuSaiChi, fromUserGetChatId, fetchDbChatId, fromChatIdGetTeam, getChatIdMembersOfTeam
@@ -114,7 +115,7 @@ async def endAdminInsertPartecipant(update: Update, context: ContextTypes.DEFAUL
 async def startSendMessageToEveryone(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     chat_id = update.effective_chat.id
     is_it_admin = CheckAddmin(chat_id)
-
+    
     if is_it_admin:
         
         await context.bot.send_message(chat_id=chat_id, text='Che messaggio vuoi mandare a tutti?', parse_mode='HTML')
@@ -130,7 +131,9 @@ async def endSendMessageToEveryone(update: Update, context: ContextTypes.DEFAULT
     users_chat_id = fetchDbChatId()
 
     for row in users_chat_id:
+        
         await context.bot.send_message(chat_id= row, text= text_to_send, parse_mode='HTML')
+       
     return  ConversationHandler.END
 
 
@@ -155,3 +158,18 @@ async def endSendMessageToYourTeam(update: Update, context: ContextTypes.DEFAULT
         await context.bot.send_message(chat_id= row, text= text_to_send, parse_mode='HTML')
 
     return  ConversationHandler.END
+
+
+async def sendPhotoToEveryone(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """photo received management"""
+    chat_id = update.effective_chat.id
+    users_chat_id = fetchDbChatId()
+    
+    for chat_id in users_chat_id:
+        await context.bot.send_photo(
+            chat_id=chat_id, photo=update.message.photo[-1].file_id
+        )
+
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id, text="photo forwarded to all user"
+    )

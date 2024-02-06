@@ -4,7 +4,7 @@ from telegram.ext import ConversationHandler
 
 from command import start, getPartecipant, help
 from conversation import start_dialog, answer, cancel, endSendMessageToEveryone, startSendMessageToEveryone, startSendMessageToYourTeam, endSendMessageToYourTeam
-from conversation import startAdminInsertPartecipant, teamAdminInsertPartecipant, tuSaiChiAdminInsertPartecipant, endAdminInsertPartecipant
+from conversation import startAdminInsertPartecipant, teamAdminInsertPartecipant, tuSaiChiAdminInsertPartecipant, endAdminInsertPartecipant, sendPhotoToEveryone
 from conversation import ANSWER, MESSAGE_TO_EVERYONE, NOME, SQUADRA, TUSAICHI, MESSAGE_TO_TEAM
 from SecretToken import BOT_TOKEN
 
@@ -20,7 +20,7 @@ if __name__ == '__main__':
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler('addme',start_dialog)],
         states={
-            ANSWER: [MessageHandler(filters.TEXT,answer),
+            ANSWER: [MessageHandler(filters.TEXT & (~filters.COMMAND),answer),
                      CommandHandler('cancel',cancel)],
 
         },
@@ -30,11 +30,11 @@ if __name__ == '__main__':
     conv_assign_partecipant_handler = ConversationHandler(
     entry_points=[CommandHandler('addpartecipant',startAdminInsertPartecipant)],
     states={
-        NOME: [MessageHandler(filters.TEXT,teamAdminInsertPartecipant),
+        NOME: [MessageHandler(filters.TEXT  & (~filters.COMMAND),teamAdminInsertPartecipant),
                  CommandHandler('cancel',cancel)],
-        SQUADRA: [MessageHandler(filters.TEXT,tuSaiChiAdminInsertPartecipant),
+        SQUADRA: [MessageHandler(filters.TEXT & (~filters.COMMAND),tuSaiChiAdminInsertPartecipant),
                  CommandHandler('cancel',cancel)],
-        TUSAICHI: [MessageHandler(filters.TEXT,endAdminInsertPartecipant),
+        TUSAICHI: [MessageHandler(filters.TEXT & (~filters.COMMAND),endAdminInsertPartecipant),
                  CommandHandler('cancel',cancel)],
     },
         fallbacks=[CommandHandler('cancel',cancel)],
@@ -60,6 +60,11 @@ if __name__ == '__main__':
         fallbacks=[CommandHandler('cancel',cancel)],
     )
 
+    image_handler = MessageHandler(filters.PHOTO & (~filters.FORWARDED), sendPhotoToEveryone)
+
+
+
+
     application.add_handler(start_handler)
     application.add_handler(conv_handler)
     application.add_handler(list_handler)
@@ -67,6 +72,7 @@ if __name__ == '__main__':
     application.add_handler(help_handler)
     application.add_handler(conv_to_all_handler)
     application.add_handler(conv_to_team_handler)
+    application.add_handler(image_handler)
     
 
     application.run_polling()
