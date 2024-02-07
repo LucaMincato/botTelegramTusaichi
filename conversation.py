@@ -5,7 +5,7 @@ import time
 from DBexecution import ControlUser, checkUserId, CheckAddmin, fromChatIdGetUser, upgradeTeam, getTuSaiChi
 from DBexecution import  upgradeTuSaiChi, fromUserGetChatId, fetchDbChatId, fromChatIdGetTeam, getChatIdMembersOfTeam
 
-ANSWER,NOME,SQUADRA,TUSAICHI, MESSAGE_TO_EVERYONE, MESSAGE_TO_TEAM, BEREAL_TO_EVERYONE,TUSAICHI_VERDE,TUSAICHI_BLU,TUSAICHI_GIALLO,TUSAICHI_ROSSO = range(11)
+ANSWER,NOME,SQUADRA,TUSAICHI, MESSAGE_TO_EVERYONE, MESSAGE_TO_TEAM, BEREAL_TO_EVERYONE,TUSAICHI_VERDE,TUSAICHI_BLU,TUSAICHI_GIALLO,TUSAICHI_ROSSO,PHOTO_SPOTTED,TEXT_SPOTTED = range(13)
 
 def registerId():
     global userId
@@ -180,24 +180,6 @@ async def sendPhotoToEveryone(update: Update, context: ContextTypes.DEFAULT_TYPE
     )
 
 
-async def sendPhotoToTeam(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """photo received management"""
-
-    users_chat_id = fetchDbChatId()
-    team = fromChatIdGetTeam(chat_id)
-    users_chat_id = getChatIdMembersOfTeam(team)
-    users_chat_id.append(6307311132)
-    seconds = time.time()
-    local_time = time.ctime(seconds)
-
-    for chat_id in users_chat_id:
-        await context.bot.send_photo(
-            chat_id=chat_id, photo=update.message.photo[-1].file_id
-        )
-
-    await context.bot.send_message(
-        chat_id=update.effective_chat.id, text=f"{local_time}"
-    )
 
 
 async def BeReal(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -303,4 +285,59 @@ async def greenMessageTuSaiChi(update: Update, context: ContextTypes.DEFAULT_TYP
 
     await context.bot.send_message(chat_id=yellow_tusaichi_chat_id, text=text_to_send, parse_mode='HTML')
     await context.bot.send_message(chat_id=chat_id, text='Hai mandato tutti i manfesti', parse_mode='HTML')
+    return  ConversationHandler.END
+
+
+
+async def startSpotted(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    """photo received management"""
+    
+
+
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id, text="manda una foto di chi cosa hai visto"
+    )
+    return PHOTO_SPOTTED
+
+
+async def photoSpotted(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    """photo received management"""
+    chat_id = update.effective_chat.id
+    users_chat_id = fetchDbChatId()
+    team = fromChatIdGetTeam(chat_id)
+    users_chat_id = getChatIdMembersOfTeam(team)
+    users_chat_id.append(6307311132)
+    users_chat_id.remove(chat_id)
+    seconds = time.time()
+    local_time = time.ctime(seconds)
+
+    for row in users_chat_id:
+        await context.bot.send_photo(
+            chat_id=row, photo=update.message.photo[-1].file_id
+        )
+
+        await context.bot.send_message(
+        chat_id=row, text=f"{local_time}"
+        )
+
+    await context.bot.send_message(chat_id=row, text="aggiungi una descrizione")
+        
+    return TEXT_SPOTTED
+
+
+async def textSpotted(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    chat_id = update.effective_chat.id
+    text_to_send = update.effective_message.text
+    users_chat_id = fetchDbChatId()
+    team = fromChatIdGetTeam(chat_id)
+    users_chat_id = getChatIdMembersOfTeam(team)
+    users_chat_id.append(6307311132)
+    users_chat_id.remove(chat_id)
+
+    
+    for row in users_chat_id:
+        await context.bot.send_message(chat_id= row, text= text_to_send, parse_mode='HTML')
+
     return  ConversationHandler.END

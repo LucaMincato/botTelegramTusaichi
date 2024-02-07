@@ -4,10 +4,10 @@ from telegram.ext import ConversationHandler
 
 from command import start, getPartecipant, help,comemanifestarsi, punteggi
 from conversation import start_dialog, answer, cancel, endSendMessageToEveryone, startSendMessageToEveryone, startSendMessageToYourTeam, endSendMessageToYourTeam
-from conversation import startAdminInsertPartecipant, teamAdminInsertPartecipant, tuSaiChiAdminInsertPartecipant, endAdminInsertPartecipant, sendPhotoToEveryone,BeReal, endBeReal
-from conversation import startMessageTuSaiChi, yellowMessageTuSaiChi, redMessageTuSaiChi, blueMessageTuSaiChi, greenMessageTuSaiChi
+from conversation import startAdminInsertPartecipant, teamAdminInsertPartecipant, tuSaiChiAdminInsertPartecipant, endAdminInsertPartecipant, BeReal, endBeReal
+from conversation import startMessageTuSaiChi, yellowMessageTuSaiChi, redMessageTuSaiChi, blueMessageTuSaiChi, greenMessageTuSaiChi, startSpotted, photoSpotted, textSpotted
 from conversation import ANSWER, MESSAGE_TO_EVERYONE, NOME, SQUADRA, TUSAICHI, MESSAGE_TO_TEAM, BEREAL_TO_EVERYONE
-from conversation import TUSAICHI_VERDE,TUSAICHI_BLU,TUSAICHI_GIALLO,TUSAICHI_ROSSO
+from conversation import TUSAICHI_VERDE,TUSAICHI_BLU,TUSAICHI_GIALLO,TUSAICHI_ROSSO,PHOTO_SPOTTED, TEXT_SPOTTED
 from SecretToken import BOT_TOKEN
 
 if __name__ == '__main__':
@@ -90,6 +90,19 @@ if __name__ == '__main__':
         fallbacks=[CommandHandler('cancel',cancel)],
     )
 
+    spotted_handler = ConversationHandler(
+    entry_points=[CommandHandler('spotted',startSpotted)],
+    states={
+            PHOTO_SPOTTED: [MessageHandler(filters.PHOTO & (~filters.FORWARDED) & (~filters.COMMAND) & (~filters.TEXT),photoSpotted),
+                                 CommandHandler('cancel',cancel)],
+            TEXT_SPOTTED: [MessageHandler(filters.TEXT & (~filters.COMMAND) & (~filters.TEXT),textSpotted),
+                                 CommandHandler('cancel',cancel)],
+
+        },
+        fallbacks=[CommandHandler('cancel',cancel)],
+    )
+
+
 
     application.add_handler(start_handler)
     application.add_handler(conv_handler)
@@ -102,7 +115,8 @@ if __name__ == '__main__':
     application.add_handler(help_manifesto_handler)
     application.add_handler(help_punteggi_handler)
     application.add_handler(conv_manifesto_tuSaiChi_handler)
-    
+    application.add_handler(spotted_handler)
+
 
     application.run_polling()
     
