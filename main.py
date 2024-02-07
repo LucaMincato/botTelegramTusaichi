@@ -2,7 +2,7 @@ from telegram.ext import ApplicationBuilder, CommandHandler
 from telegram.ext import filters, MessageHandler
 from telegram.ext import ConversationHandler
 
-from command import start, getPartecipant, help,comemanifestarsi
+from command import start, getPartecipant, help,comemanifestarsi, punteggi
 from conversation import start_dialog, answer, cancel, endSendMessageToEveryone, startSendMessageToEveryone, startSendMessageToYourTeam, endSendMessageToYourTeam
 from conversation import startAdminInsertPartecipant, teamAdminInsertPartecipant, tuSaiChiAdminInsertPartecipant, endAdminInsertPartecipant, sendPhotoToEveryone,BeReal, endBeReal
 from conversation import ANSWER, MESSAGE_TO_EVERYONE, NOME, SQUADRA, TUSAICHI, MESSAGE_TO_TEAM, BEREAL_TO_EVERYONE
@@ -14,9 +14,10 @@ if __name__ == '__main__':
 
    # startdialog_handler = CommandHandler('start_dialog', start_dialog)
     start_handler = CommandHandler('start', start) 
-    list_handler = CommandHandler('getpartecipant', getPartecipant) 
+    list_handler = CommandHandler('lista_partecipanti', getPartecipant) 
     help_handler = CommandHandler('help', help) 
-    help_manifesto_handler = CommandHandler('comemanifestarsi',comemanifestarsi)
+    help_manifesto_handler = CommandHandler('come_manifestarsi',comemanifestarsi)
+    help_punteggi_handler =  CommandHandler('punteggi',punteggi)
    
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler('addme',start_dialog)],
@@ -29,7 +30,7 @@ if __name__ == '__main__':
     )
 
     conv_assign_partecipant_handler = ConversationHandler(
-    entry_points=[CommandHandler('addpartecipant',startAdminInsertPartecipant)],
+    entry_points=[CommandHandler('aggiungi_partecipanti',startAdminInsertPartecipant)],
     states={
         NOME: [MessageHandler(filters.TEXT  & (~filters.COMMAND),teamAdminInsertPartecipant),
                  CommandHandler('cancel',cancel)],
@@ -82,6 +83,7 @@ if __name__ == '__main__':
     application.add_handler(conv_to_team_handler)
     application.add_handler(beReal_handler)
     application.add_handler(help_manifesto_handler)
+    application.add_handler(help_punteggi_handler)
 
     application.run_polling()
     
