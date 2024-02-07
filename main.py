@@ -5,7 +5,9 @@ from telegram.ext import ConversationHandler
 from command import start, getPartecipant, help,comemanifestarsi, punteggi
 from conversation import start_dialog, answer, cancel, endSendMessageToEveryone, startSendMessageToEveryone, startSendMessageToYourTeam, endSendMessageToYourTeam
 from conversation import startAdminInsertPartecipant, teamAdminInsertPartecipant, tuSaiChiAdminInsertPartecipant, endAdminInsertPartecipant, sendPhotoToEveryone,BeReal, endBeReal
+from conversation import startMessageTuSaiChi, yellowMessageTuSaiChi, redMessageTuSaiChi, blueMessageTuSaiChi, greenMessageTuSaiChi
 from conversation import ANSWER, MESSAGE_TO_EVERYONE, NOME, SQUADRA, TUSAICHI, MESSAGE_TO_TEAM, BEREAL_TO_EVERYONE
+from conversation import TUSAICHI_VERDE,TUSAICHI_BLU,TUSAICHI_GIALLO,TUSAICHI_ROSSO
 from SecretToken import BOT_TOKEN
 
 if __name__ == '__main__':
@@ -73,6 +75,21 @@ if __name__ == '__main__':
         fallbacks=[CommandHandler('cancel',cancel)],
     )
 
+    conv_manifesto_tuSaiChi_handler = ConversationHandler(
+    entry_points=[CommandHandler('aggiungi_partecipanti',startMessageTuSaiChi)],
+    states={
+        TUSAICHI_GIALLO: [MessageHandler(filters.TEXT  & (~filters.COMMAND),yellowMessageTuSaiChi),
+                        CommandHandler('cancel',cancel)],
+        TUSAICHI_ROSSO: [MessageHandler(filters.TEXT & (~filters.COMMAND),redMessageTuSaiChi),
+                        CommandHandler('cancel',cancel)],
+        TUSAICHI_BLU: [MessageHandler(filters.TEXT & (~filters.COMMAND),blueMessageTuSaiChi),
+                        CommandHandler('cancel',cancel)],
+        TUSAICHI_VERDE: [MessageHandler(filters.TEXT & (~filters.COMMAND),greenMessageTuSaiChi),
+                        CommandHandler('cancel',cancel)],
+    },
+        fallbacks=[CommandHandler('cancel',cancel)],
+    )
+
 
     application.add_handler(start_handler)
     application.add_handler(conv_handler)
@@ -84,6 +101,8 @@ if __name__ == '__main__':
     application.add_handler(beReal_handler)
     application.add_handler(help_manifesto_handler)
     application.add_handler(help_punteggi_handler)
+    application.add_handler(conv_manifesto_tuSaiChi_handler)
+    
 
     application.run_polling()
     

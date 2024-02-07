@@ -153,3 +153,23 @@ def fromChatIdGetTeam(chatId):
             team = row[2]
             break       
     return team
+
+def getTuSaiChi(team):
+    conn1 = sqlite3.connect('telegramBot.db')
+    curs1 = conn1.cursor()
+    sql = f"SELECT * FROM partecipantiBot "
+    fetchall = curs1.execute(sql)
+    conn1.commit()
+    conn1.close
+    for row in fetchall:
+
+        if team.strip().lower() == row[2]:
+
+            if row[2].strip().lower() == 'true':
+                chat_id_tusaichi = row[1]
+                break
+            
+    return chat_id_tusaichi
+
+
+    

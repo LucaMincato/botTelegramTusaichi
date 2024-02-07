@@ -2,10 +2,10 @@ from telegram import Update
 from telegram.ext import ContextTypes, CallbackContext, ConversationHandler
 import time
 
-from DBexecution import ControlUser, checkUserId, CheckAddmin, fromChatIdGetUser, upgradeTeam
+from DBexecution import ControlUser, checkUserId, CheckAddmin, fromChatIdGetUser, upgradeTeam, getTuSaiChi
 from DBexecution import  upgradeTuSaiChi, fromUserGetChatId, fetchDbChatId, fromChatIdGetTeam, getChatIdMembersOfTeam
 
-ANSWER,NOME,SQUADRA,TUSAICHI, MESSAGE_TO_EVERYONE, MESSAGE_TO_TEAM, BEREAL_TO_EVERYONE = range(7)
+ANSWER,NOME,SQUADRA,TUSAICHI, MESSAGE_TO_EVERYONE, MESSAGE_TO_TEAM, BEREAL_TO_EVERYONE,TUSAICHI_VERDE,TUSAICHI_BLU,TUSAICHI_GIALLO,TUSAICHI_ROSSO = range(11)
 
 def registerId():
     global userId
@@ -248,3 +248,59 @@ async def endBeReal(update: Update, context: ContextTypes.DEFAULT_TYPE):
             chat_id=update.effective_chat.id, text="mi dispiace ma sei fuori tempo massimo")
 
     return ConversationHandler.END
+
+async def startMessageTuSaiChi(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    chat_id = update.effective_chat.id
+    is_it_admin = CheckAddmin(chat_id)
+
+    if is_it_admin:
+        await context.bot.send_message(chat_id=chat_id, text='Scrivi il manifesto per la squadra gialla', parse_mode='HTML')
+        return TUSAICHI_GIALLO
+    else:
+         await context.bot.send_message(chat_id=chat_id, text='Mi dispiace ma solo Luca Può usare questo comando', parse_mode='HTML')
+         return  ConversationHandler.END
+
+
+async def yellowMessageTuSaiChi(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    chat_id = update.effective_chat.id
+    text_to_send = update.effective_message.text
+    team = 'giallo'
+    yellow_tusaichi_chat_id = getTuSaiChi(team)
+
+    await context.bot.send_message(chat_id=yellow_tusaichi_chat_id, text=text_to_send, parse_mode='HTML')
+    await context.bot.send_message(chat_id=chat_id, text='Scrivi il manifesto per la squadra rossa', parse_mode='HTML')
+    return TUSAICHI_ROSSO
+
+
+async def redMessageTuSaiChi(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    chat_id = update.effective_chat.id
+    text_to_send = update.effective_message.text
+    team = 'rosso'
+    yellow_tusaichi_chat_id = getTuSaiChi(team)
+
+    await context.bot.send_message(chat_id=yellow_tusaichi_chat_id, text=text_to_send, parse_mode='HTML')
+    await context.bot.send_message(chat_id=chat_id, text='Scrivi il manifesto per la squadra blu', parse_mode='HTML')
+    return TUSAICHI_BLU
+
+
+
+async def blueMessageTuSaiChi(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    chat_id = update.effective_chat.id
+    text_to_send = update.effective_message.text
+    team = 'blu'
+    yellow_tusaichi_chat_id = getTuSaiChi(team)
+
+    await context.bot.send_message(chat_id=yellow_tusaichi_chat_id, text=text_to_send, parse_mode='HTML')
+    await context.bot.send_message(chat_id=chat_id, text='Scrivi il manifesto per la squadra verde', parse_mode='HTML')
+    return TUSAICHI_VERDE
+
+
+async def greenMessageTuSaiChi(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    chat_id = update.effective_chat.id
+    text_to_send = update.effective_message.text
+    team = 'verde'
+    yellow_tusaichi_chat_id = getTuSaiChi(team)
+
+    await context.bot.send_message(chat_id=yellow_tusaichi_chat_id, text=text_to_send, parse_mode='HTML')
+    await context.bot.send_message(chat_id=chat_id, text='Hai mandato tutti i manfesti', parse_mode='HTML')
+    return  ConversationHandler.END
