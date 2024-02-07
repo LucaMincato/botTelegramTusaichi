@@ -292,11 +292,9 @@ async def greenMessageTuSaiChi(update: Update, context: ContextTypes.DEFAULT_TYP
 async def startSpotted(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     """photo received management"""
-    
-
 
     await context.bot.send_message(
-        chat_id=update.effective_chat.id, text="manda una foto di chi cosa hai visto"
+        chat_id=update.effective_chat.id, text="manda una foto di che cosa hai visto"
     )
     return PHOTO_SPOTTED
 
@@ -339,5 +337,7 @@ async def textSpotted(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     for row in users_chat_id:
         await context.bot.send_message(chat_id= row, text= text_to_send, parse_mode='HTML')
+
+    await context.bot.send_message(chat_id= chat_id, text= "lo spotted è andato a buon fine", parse_mode='HTML')
 
     return  ConversationHandler.END

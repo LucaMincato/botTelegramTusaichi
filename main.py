@@ -16,9 +16,9 @@ if __name__ == '__main__':
 
    # startdialog_handler = CommandHandler('start_dialog', start_dialog)
     start_handler = CommandHandler('start', start) 
-    list_handler = CommandHandler('lista_partecipanti', getPartecipant) 
+    list_handler = CommandHandler('listapartecipanti', getPartecipant) 
     help_handler = CommandHandler('help', help) 
-    help_manifesto_handler = CommandHandler('come_manifestarsi',comemanifestarsi)
+    help_manifesto_handler = CommandHandler('comemanifestarsi',comemanifestarsi)
     help_punteggi_handler =  CommandHandler('punteggi',punteggi)
    
     conv_handler = ConversationHandler(
@@ -32,7 +32,7 @@ if __name__ == '__main__':
     )
 
     conv_assign_partecipant_handler = ConversationHandler(
-    entry_points=[CommandHandler('aggiungi_partecipanti',startAdminInsertPartecipant)],
+    entry_points=[CommandHandler('aggiungipartecipanti',startAdminInsertPartecipant)],
     states={
         NOME: [MessageHandler(filters.TEXT  & (~filters.COMMAND),teamAdminInsertPartecipant),
                  CommandHandler('cancel',cancel)],
@@ -45,7 +45,7 @@ if __name__ == '__main__':
     )
 
     conv_to_all_handler = ConversationHandler(
-    entry_points=[CommandHandler('messageToAll',startSendMessageToEveryone)],
+    entry_points=[CommandHandler('messaggioatutti',startSendMessageToEveryone)],
     states={
         MESSAGE_TO_EVERYONE: [MessageHandler(filters.TEXT,endSendMessageToEveryone),
                               CommandHandler('cancel',cancel)],
@@ -55,7 +55,7 @@ if __name__ == '__main__':
     )
 
     conv_to_team_handler = ConversationHandler(
-    entry_points=[CommandHandler('messageToTeam',startSendMessageToYourTeam)],
+    entry_points=[CommandHandler('messagealteam',startSendMessageToYourTeam)],
     states={
         MESSAGE_TO_TEAM: [MessageHandler(filters.TEXT,endSendMessageToYourTeam),
                               CommandHandler('cancel',cancel)],
@@ -66,7 +66,7 @@ if __name__ == '__main__':
 
 
     beReal_handler = ConversationHandler(
-    entry_points=[CommandHandler('BeReal',BeReal)],
+    entry_points=[CommandHandler('bereal',BeReal)],
     states={
             BEREAL_TO_EVERYONE: [MessageHandler(filters.PHOTO & (~filters.FORWARDED) & (~filters.COMMAND) & (~filters.TEXT),endBeReal),
                                  CommandHandler('cancel',cancel)],
@@ -76,7 +76,7 @@ if __name__ == '__main__':
     )
 
     conv_manifesto_tuSaiChi_handler = ConversationHandler(
-    entry_points=[CommandHandler('aggiungi_partecipanti',startMessageTuSaiChi)],
+    entry_points=[CommandHandler('manifestotusaichi',startMessageTuSaiChi)],
     states={
         TUSAICHI_GIALLO: [MessageHandler(filters.TEXT  & (~filters.COMMAND),yellowMessageTuSaiChi),
                         CommandHandler('cancel',cancel)],
@@ -95,7 +95,7 @@ if __name__ == '__main__':
     states={
             PHOTO_SPOTTED: [MessageHandler(filters.PHOTO & (~filters.FORWARDED) & (~filters.COMMAND) & (~filters.TEXT),photoSpotted),
                                  CommandHandler('cancel',cancel)],
-            TEXT_SPOTTED: [MessageHandler(filters.TEXT & (~filters.COMMAND) & (~filters.TEXT),textSpotted),
+            TEXT_SPOTTED: [MessageHandler(filters.TEXT & (~filters.COMMAND), textSpotted),
                                  CommandHandler('cancel',cancel)],
 
         },
