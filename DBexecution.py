@@ -162,13 +162,13 @@ def getTuSaiChi(team):
     conn1.commit()
     conn1.close
     for row in fetchall:
-
+ 
         if team.strip().lower() == row[2]:
 
-            if row[2].strip().lower() == 'true':
+            if row[3].strip().lower() == 'true':
                 chat_id_tusaichi = row[1]
                 break
-            
+
     return chat_id_tusaichi
 
 
