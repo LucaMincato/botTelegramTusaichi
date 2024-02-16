@@ -179,6 +179,19 @@ async def sendPhotoToEveryone(update: Update, context: ContextTypes.DEFAULT_TYPE
         chat_id=update.effective_chat.id, text=f"{local_time}"
     )
 
+async def sendPhotoToEveryone(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """photo received management"""
+    chat_id = update.effective_chat.id
+    users_chat_id = fetchDbChatId()
+    
+    for chat_id in users_chat_id:
+        await context.bot.send_photo(
+            chat_id=chat_id, photo=update.message.photo[-1].file_id
+        )
+
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id, text="photo forwarded to all user"
+    )
 
 
 
