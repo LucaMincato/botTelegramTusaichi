@@ -227,7 +227,7 @@ async def endBeReal(update: Update, context: ContextTypes.DEFAULT_TYPE):
     username = fromChatIdGetUser(chat_id)
 
     if  seconds < seconds_plus_thirty:
-
+        image_handler = MessageHandler(filters.PHOTO & (~filters.FORWARDED), sendPhotoToEveryone)
         for chat_id in users_chat_id:
             await context.bot.send_photo(
                 chat_id=chat_id, photo=update.message.photo[-1].file_id
