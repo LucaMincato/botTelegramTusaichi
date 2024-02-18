@@ -2,10 +2,11 @@ from telegram import Update
 from telegram.ext import ContextTypes, CallbackContext, ConversationHandler
 import time
 
-from DBexecution import ControlUser, checkUserId, CheckAddmin, fromChatIdGetUser, upgradeTeam, getTuSaiChi
+from DBexecution import ControlUser, checkUserId, CheckAddmin, upgradeTeam, getTuSaiChi
 from DBexecution import  upgradeTuSaiChi, fromUserGetChatId, fetchDbChatId, fromChatIdGetTeam, getChatIdMembersOfTeam
 
-ANSWER,NOME,SQUADRA,TUSAICHI, MESSAGE_TO_EVERYONE, MESSAGE_TO_TEAM, BEREAL_TO_EVERYONE,TUSAICHI_VERDE,TUSAICHI_BLU,TUSAICHI_GIALLO,TUSAICHI_ROSSO,PHOTO_SPOTTED,TEXT_SPOTTED = range(13)
+ANSWER,NOME,SQUADRA,TUSAICHI, MESSAGE_TO_EVERYONE, MESSAGE_TO_TEAM,TUSAICHI_VERDE,TUSAICHI_BLU,TUSAICHI_GIALLO,TUSAICHI_ROSSO,PHOTO_SPOTTED,TEXT_SPOTTED = range(12)
+
 
 def registerId():
     global userId
@@ -32,7 +33,7 @@ async def answer(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     already_exist = ControlUser(entrydb)
 
     if already_exist:
-        await context.bot.send_message(chat_id=chat_id, text='C\'è stato un errore.\nO ti sei già registrato.\nOppure hai cliccato per sbaglio un comando prima di inserire il nome', parse_mode='HTML')
+        await context.bot.send_message(chat_id=chat_id, text='C\'è stato un errore.\nTi sei già registrato.', parse_mode='HTML')
         await context.bot.send_message(chat_id=6307311132, text=f'Luca {user} sta sercando di registrarsi due volte', parse_mode='HTML')
     else:
         await context.bot.send_message(chat_id=chat_id, text='Complimenti sei stato aggiunto ai partecipanti.\nOra aspetta che admin ti inserisca in una squadra e ti dica se sei il tuSaiChi', parse_mode='HTML')
@@ -159,90 +160,6 @@ async def endSendMessageToYourTeam(update: Update, context: ContextTypes.DEFAULT
 
     return  ConversationHandler.END
 
-
-async def sendPhotoToEveryone(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """photo received management"""
-    chat_id = update.effective_chat.id
-    users_chat_id = fetchDbChatId()
-    seconds = time.time()
-    local_time = time.ctime(seconds)
-    seconds_plus_thirty = seconds + 1800
-    time_plus_thirty = time.ctime(seconds_plus_thirty)
- 
-
-    for chat_id in users_chat_id:
-        await context.bot.send_photo(
-            chat_id=chat_id, photo=update.message.photo[-1].file_id
-        )
-
-    await context.bot.send_message(
-        chat_id=update.effective_chat.id, text=f"{local_time}"
-    )
-
-async def sendPhotoToEveryone(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """photo received management"""
-    chat_id = update.effective_chat.id
-    users_chat_id = fetchDbChatId()
-    
-    for chat_id in users_chat_id:
-        await context.bot.send_photo(
-            chat_id=chat_id, photo=update.message.photo[-1].file_id
-        )
-
-    await context.bot.send_message(
-        chat_id=update.effective_chat.id, text="photo forwarded to all user"
-    )
-
-
-
-async def BeReal(update: Update, context: ContextTypes.DEFAULT_TYPE):
-
-    chat_id = update.effective_chat.id
-    is_it_admin = CheckAddmin(chat_id)
-
-    users_chat_id = fetchDbChatId()
-
-    global seconds_plus_thirty
-    seconds = time.time()
-    local_time = time.ctime(seconds)
-    seconds_plus_thirty = seconds + 1800
-    time_plus_thirty = time.ctime(seconds_plus_thirty)
-    
-    if is_it_admin:
-
-        for chat_id in users_chat_id:
-            await context.bot.send_message(chat_id=chat_id, text=f'BE REAL!!!!\n \nFai vedere a tutti queelo che stai facendo con una foto\n\n\nHai tempo mezz\'ora e riceverai un punto\n\ninizio {local_time}\nfine {time_plus_thirty}', parse_mode='HTML')
-
-    else:
-         await context.bot.send_message(chat_id=chat_id, text='Mi dispiace ma solo Luca Può usare questo comando', parse_mode='HTML')
-
-    return BEREAL_TO_EVERYONE
-
-async def endBeReal(update: Update, context: ContextTypes.DEFAULT_TYPE):
-
-    chat_id = update.effective_chat.id
-    users_chat_id = fetchDbChatId()
-    users_chat_id.remove(chat_id)
-    seconds = time.time()
-    username = fromChatIdGetUser(chat_id)
-
-    if  seconds < seconds_plus_thirty:
-        image_handler = MessageHandler(filters.PHOTO & (~filters.FORWARDED), sendPhotoToEveryone)
-        for chat_id in users_chat_id:
-            await context.bot.send_photo(
-                chat_id=chat_id, photo=update.message.photo[-1].file_id
-            )
-
-            await context.bot.send_message(
-            chat_id=chat_id, text=f"{username} ha pubblicato un BeReal")
-            
-            await context.bot.send_message(
-            chat_id=update.effective_chat.id, text="il tuo BeReal è andato a buon fine")
-    else:
-        await context.bot.send_message(
-            chat_id=update.effective_chat.id, text="mi dispiace ma sei fuori tempo massimo")
-
-    return ConversationHandler.END
 
 async def startMessageTuSaiChi(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.effective_chat.id

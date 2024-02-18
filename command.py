@@ -3,7 +3,11 @@ from DBexecution import CheckAddmin, checkUserId, getUserQuery
 
 from telegram import Update, KeyboardButton, ReplyKeyboardMarkup
 from telegram.ext import ContextTypes, CallbackContext
+from DBexecution import  fetchDbChatId, fromChatIdGetUser
+import time
 
+
+BeRealTime = {'timePlusThirty' : 0}
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -11,7 +15,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await context.bot.send_message(
         chat_id = chat_id,
         text=('Benvenuto a tuSaiChi un gioco che meterà a dura prova le tue abilità.\
-              \nIl gioco non è semplice vi avviso. \
+              \nIl gioco non è semplice vi avviso.\
               L\'unico modo per vincere è facendo gioco di squadra ed aiutando il tuSaiChi della propria squadra a manifestarsi senza farsi scoprire.\nSe non hai mai giocato al questo gioco o le regole ti sono poco chiare non preoccuparti usa il comando /help.\
               \nUna volta che hai capito le regole e ti senti pronto per iniziare questa sfida clicca il comando /addme.\
               \nBuons fortuna e ricorda di non nominare mai tu sai chi'), parse_mode='HTML'
@@ -86,6 +90,56 @@ async def punteggi(update: Update, context: ContextTypes.DEFAULT_TYPE):
             chat_id = chat_id,
             text=(testo), parse_mode='HTML'
         )
-     
+
+
+async def sendPhotoToEveryone(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """photo received management"""
+    chat_id = update.effective_chat.id
+    users_chat_id = fetchDbChatId()
+    users_chat_id.remove(chat_id)
+    username = fromChatIdGetUser(chat_id)
+
+    if time.time() < BeRealTime['timePlusThirty']:
+
+        for row in users_chat_id:
+            await context.bot.send_photo(
+                chat_id=row, photo=update.message.photo[-1].file_id
+                )
+            await context.bot.send_message(
+                chat_id = row,
+                text=(f'{username} ha scattato un BeReal'), parse_mode='HTML')
+        await context.bot.send_message(
+                chat_id = chat_id,
+                text=('il tuo BeReal è andato a buon fine'), parse_mode='HTML')
+    else:
+        await context.bot.send_message(
+                chat_id = chat_id,
+                text=('Il tempo del BeReal è finito'), parse_mode='HTML')
+
+
+
+
+async def BeRealStartTimer(update: Update, context: ContextTypes.DEFAULT_TYPE):
+      
+    users_chat_id = fetchDbChatId()
+    chat_id = update.effective_chat.id
+    is_it_admin = CheckAddmin(chat_id)
+
+    if is_it_admin:
+
+        seconds = time.time()
+        BeRealTime['timePlusThirty'] = seconds + 1800
+        testo =  'BE REAL!!!!\n\nFai vedere a tutti quello che stai facendo con una foto\n\n\nHai tempo mezz\'ora e riceverai un punto'
+
+        for row in users_chat_id:
+            await context.bot.send_message(
+            chat_id = row,
+            text=(testo), parse_mode='HTML')
+    else:
+         await context.bot.send_message(
+            chat_id = row,
+            text=('Solo il giudice supremo può mandare questo comando'), parse_mode='HTML')
+
+
 
     
