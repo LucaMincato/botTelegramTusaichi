@@ -141,5 +141,19 @@ async def BeRealStartTimer(update: Update, context: ContextTypes.DEFAULT_TYPE):
             text=('Solo il giudice supremo può mandare questo comando'), parse_mode='HTML')
 
 
+async def addminCommand(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    chat_id = update.effective_chat.id
+    is_it_admin = CheckAddmin(chat_id)
 
-    
+    if is_it_admin:
+     
+        await context.bot.send_message(chat_id = chat_id,text=('/listapartecipanti'), parse_mode='HTML')
+        await context.bot.send_message(chat_id = chat_id,text=('/bereal'), parse_mode='HTML')
+        await context.bot.send_message(chat_id = chat_id,text=('/aggiungipartecipanti'), parse_mode='HTML')
+        await context.bot.send_message(chat_id = chat_id,text=('/manifestotusaichi'), parse_mode='HTML')
+        
+    else:
+
+        await context.bot.send_message(
+        chat_id = chat_id,
+        text=('Solo il giudice supremo può mandare questo comando'), parse_mode='HTML')
