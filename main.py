@@ -2,9 +2,10 @@ from telegram.ext import ApplicationBuilder, CommandHandler
 from telegram.ext import filters, MessageHandler
 from telegram.ext import ConversationHandler
 
+
 from command import start, getPartecipant, help,comemanifestarsi, punteggi
-from conversation import start_dialog, answer, cancel, endSendMessageToEveryone, startSendMessageToEveryone, startSendMessageToYourTeam, endSendMessageToYourTeam
-from conversation import startAdminInsertPartecipant, teamAdminInsertPartecipant, tuSaiChiAdminInsertPartecipant, endAdminInsertPartecipant, BeReal, endBeReal
+from conversation import start_dialog, answer, cancel, endSendMessageToEveryone, startSendMessageToEveryone, startSendMessageToYourTeam, endSendMessageToYourTeam, seconds_plus_thirty
+from conversation import startAdminInsertPartecipant, teamAdminInsertPartecipant, tuSaiChiAdminInsertPartecipant, endAdminInsertPartecipant, BeReal, endBeReal, sendPhotoToEveryone
 from conversation import startMessageTuSaiChi, yellowMessageTuSaiChi, redMessageTuSaiChi, blueMessageTuSaiChi, greenMessageTuSaiChi, startSpotted, photoSpotted, textSpotted
 from conversation import ANSWER, MESSAGE_TO_EVERYONE, NOME, SQUADRA, TUSAICHI, MESSAGE_TO_TEAM, BEREAL_TO_EVERYONE
 from conversation import TUSAICHI_VERDE,TUSAICHI_BLU,TUSAICHI_GIALLO,TUSAICHI_ROSSO,PHOTO_SPOTTED, TEXT_SPOTTED
@@ -102,6 +103,13 @@ if __name__ == '__main__':
         fallbacks=[CommandHandler('cancel',cancel)],
     )
 
+    image_handler = MessageHandler(filters.PHOTO & (~filters.FORWARDED), sendPhotoToEveryone)
+
+
+    seconds = time.time()
+
+    if seconds < seconds_plus_thirty:
+        application.add_handler(image_handler)
 
 
     application.add_handler(start_handler)
