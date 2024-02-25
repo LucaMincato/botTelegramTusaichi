@@ -9,14 +9,18 @@ from conversation import startAdminInsertPartecipant, teamAdminInsertPartecipant
 from conversation import startMessageTuSaiChi, yellowMessageTuSaiChi, redMessageTuSaiChi, blueMessageTuSaiChi, greenMessageTuSaiChi, startSpotted, photoSpotted, textSpotted
 from conversation import ANSWER, MESSAGE_TO_EVERYONE, NOME, SQUADRA, TUSAICHI, MESSAGE_TO_TEAM
 from conversation import TUSAICHI_VERDE,TUSAICHI_BLU,TUSAICHI_GIALLO,TUSAICHI_ROSSO,PHOTO_SPOTTED, TEXT_SPOTTED
-from SecretToken import BOT_TOKEN
+import os
+from dotenv import load_dotenv
 import time
 
 
 seconds = time.time()
 
 if __name__ == '__main__':
-    
+
+    load_dotenv()
+    BOT_TOKEN = os.getenv("BOT_TOKEN")
+
     application = ApplicationBuilder().token(BOT_TOKEN).build()
 
    # startdialog_handler = CommandHandler('start_dialog', start_dialog)
