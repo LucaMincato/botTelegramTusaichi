@@ -250,7 +250,7 @@ async def photoSpotted(update: Update, context: ContextTypes.DEFAULT_TYPE):
         chat_id=row, text=f"{local_time}"
         )
 
-    await context.bot.send_message(chat_id=row, text="aggiungi una descrizione")
+    await context.bot.send_message(chat_id=chat_id, text="aggiungi una descrizione")
         
     return TEXT_SPOTTED
 
