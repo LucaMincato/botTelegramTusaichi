@@ -32,7 +32,7 @@ async def getPartecipant(update: Update, context: ContextTypes.DEFAULT_TYPE):
         else:
             await context.bot.send_message(chat_id=chat_id, text='Mi dispiace ma solo Luca Può usare questo comando', parse_mode='HTML')
    
-async def help(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def generalHelp(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     chat_id = update.effective_chat.id
     testo =   'tuSaiChi è un gioco a squadre dove la squadra che totalizza più punti alla fine della settimana vince.\n' \
               'Ogni squadra è composta da un tuSaiChi e da degli aiutanti.\n'\
@@ -139,6 +139,15 @@ async def BeRealStartTimer(update: Update, context: ContextTypes.DEFAULT_TYPE):
          await context.bot.send_message(
             chat_id = row,
             text=('Solo il giudice supremo può mandare questo comando'), parse_mode='HTML')
+         
+
+async def help(update: Update, context: ContextTypes.DEFAULT_TYPE):
+        chat_id = update.effective_chat.id
+        await context.bot.send_message(chat_id = chat_id,text=('/punteggi'), parse_mode='HTML')
+        await context.bot.send_message(chat_id = chat_id,text=('/comemanifestarsi'), parse_mode='HTML')
+        await context.bot.send_message(chat_id = chat_id,text=('/helpgenerale'), parse_mode='HTML')
+
+
 
 
 async def addminCommand(update: Update, context: ContextTypes.DEFAULT_TYPE):

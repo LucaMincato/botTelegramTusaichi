@@ -3,7 +3,7 @@ from telegram.ext import filters, MessageHandler
 from telegram.ext import ConversationHandler
 
 
-from command import start, getPartecipant, help,comemanifestarsi, punteggi, BeRealStartTimer, sendPhotoToEveryone, addminCommand
+from command import start, getPartecipant, help,comemanifestarsi, punteggi, BeRealStartTimer, sendPhotoToEveryone, addminCommand, generalHelp
 from conversation import start_dialog, answer, cancel, endSendMessageToEveryone, startSendMessageToEveryone, startSendMessageToYourTeam, endSendMessageToYourTeam
 from conversation import startAdminInsertPartecipant, teamAdminInsertPartecipant, tuSaiChiAdminInsertPartecipant, endAdminInsertPartecipant
 from conversation import startMessageTuSaiChi, yellowMessageTuSaiChi, redMessageTuSaiChi, blueMessageTuSaiChi, greenMessageTuSaiChi, startSpotted, photoSpotted, textSpotted
@@ -27,6 +27,7 @@ if __name__ == '__main__':
     start_handler = CommandHandler('start', start) 
     list_handler = CommandHandler('listapartecipanti', getPartecipant) 
     help_handler = CommandHandler('help', help)
+    general_help_handler = CommandHandler('helpgenerale',generalHelp)
     help_manifesto_handler = CommandHandler('comemanifestarsi',comemanifestarsi)
     help_punteggi_handler =  CommandHandler('punteggi',punteggi)
     be_real_startcommand =   CommandHandler('bereal',BeRealStartTimer)
@@ -121,6 +122,7 @@ if __name__ == '__main__':
     application.add_handler(be_real_startcommand)
     application.add_handler(image_handler)
     application.add_handler(admin_command)
+    application.add_handler(general_help_handler)
 
     application.run_polling()
     
