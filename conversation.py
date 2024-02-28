@@ -3,7 +3,7 @@ from telegram.ext import ContextTypes, CallbackContext, ConversationHandler
 import time
 
 from DBexecution import ControlUser, checkUserId, CheckAddmin, upgradeTeam, getTuSaiChi
-from DBexecution import  upgradeTuSaiChi, fromUserGetChatId, fetchDbChatId, fromChatIdGetTeam, getChatIdMembersOfTeam
+from DBexecution import  upgradeTuSaiChi, fromUserGetChatId, fetchDbChatId, fromChatIdGetTeam, getChatIdMembersOfTeam, fromChatIdGetUser
 
 ANSWER,NOME,SQUADRA,TUSAICHI, MESSAGE_TO_EVERYONE, MESSAGE_TO_TEAM,TUSAICHI_VERDE,TUSAICHI_BLU,TUSAICHI_GIALLO,TUSAICHI_ROSSO,PHOTO_SPOTTED,TEXT_SPOTTED = range(12)
 
@@ -240,6 +240,7 @@ async def photoSpotted(update: Update, context: ContextTypes.DEFAULT_TYPE):
     users_chat_id.remove(chat_id)
     seconds = time.time()
     local_time = time.ctime(seconds)
+    username = fromChatIdGetUser(chat_id)
 
     for row in users_chat_id:
         await context.bot.send_photo(
@@ -247,7 +248,7 @@ async def photoSpotted(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
 
         await context.bot.send_message(
-        chat_id=row, text=f"{local_time}"
+        chat_id=row, text=f"{local_time}\n\n{username} ha spottato qualcosa!!!"
         )
 
     await context.bot.send_message(chat_id=chat_id, text="aggiungi una descrizione")
