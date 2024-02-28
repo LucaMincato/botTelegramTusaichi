@@ -60,7 +60,7 @@ if __name__ == '__main__':
     conv_to_all_handler = ConversationHandler(
     entry_points=[CommandHandler('messaggioatutti',startSendMessageToEveryone)],
     states={
-        MESSAGE_TO_EVERYONE: [MessageHandler(filters.TEXT,endSendMessageToEveryone),
+        MESSAGE_TO_EVERYONE: [MessageHandler(filters.TEXT  & (~filters.COMMAND),endSendMessageToEveryone),
                               CommandHandler('cancel',cancel)],
 
     },

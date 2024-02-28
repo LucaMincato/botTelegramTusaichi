@@ -120,10 +120,12 @@ async def startSendMessageToEveryone(update: Update, context: ContextTypes.DEFAU
     if is_it_admin:
         
         await context.bot.send_message(chat_id=chat_id, text='Che messaggio vuoi mandare a tutti?', parse_mode='HTML')
+        return MESSAGE_TO_EVERYONE
     else:
          await context.bot.send_message(chat_id=chat_id, text='Mi dispiace ma solo Luca Può usare questo comando', parse_mode='HTML')
+         return  ConversationHandler.END
 
-    return MESSAGE_TO_EVERYONE
+    
 
 
 
