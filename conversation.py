@@ -130,8 +130,10 @@ async def startSendMessageToEveryone(update: Update, context: ContextTypes.DEFAU
 
 
 async def endSendMessageToEveryone(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    chat_id = update.effective_chat.id
     text_to_send = update.effective_message.text
     users_chat_id = fetchDbChatId()
+    users_chat_id.remove(chat_id)
 
     for row in users_chat_id:
         

@@ -160,6 +160,7 @@ async def addminCommand(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await context.bot.send_message(chat_id = chat_id,text=('/bereal'), parse_mode='HTML')
         await context.bot.send_message(chat_id = chat_id,text=('/aggiungipartecipanti'), parse_mode='HTML')
         await context.bot.send_message(chat_id = chat_id,text=('/manifestotusaichi'), parse_mode='HTML')
+        await context.bot.send_message(chat_id = chat_id,text=('/messaggioatutti'), parse_mode='HTML')
         
     else:
 
